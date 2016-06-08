@@ -51,7 +51,7 @@ public class DownloadPanel extends JPanel implements ITabbedPanel {
 						System.out.println("ERROR: Could not load Shader %s".format(selection));
 					}
 				}
-				System.out.println();
+				System.out.println("Download Finished");
 			}
 		});
 

@@ -203,6 +203,8 @@ public class SourceCodeLoader {
 			e.printStackTrace();
 		}
 		
+		System.out.println("Saved new Shader to: " + path);
+		
 		return path;
 		
 	}
@@ -211,7 +213,7 @@ public class SourceCodeLoader {
 		String id;
 		String source_code;
 		String shader_code;
-		String save_to_path = "res/";
+		String save_to_path = "res/shader/";
 		
 		
 		id =  getIDfromURL(web_url);

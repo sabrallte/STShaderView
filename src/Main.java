@@ -1,6 +1,3 @@
-/**
- * Created by Carl on 30.10.2015.
- */
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -71,6 +68,7 @@ public class Main  implements ValueSubmittedListener{
     
     // GUI
     JTabbedPane tabpane;
+    JFrame f;
     
     //GUI - Parameter
     float valOftextSliderMultiplicator = 0;
@@ -103,7 +101,11 @@ public class Main  implements ValueSubmittedListener{
 
     private void setUpTextures()
     {
-       texture = loadTex.loadImageSource("res/images/wood.png");
+       texture = loadTex.loadImageSource("res/textures/1.png");
+       texture = loadTex.loadImageSource("res/textures/2.png");
+       texture = loadTex.loadImageSource("res/textures/1.png");
+       texture = loadTex.loadImageSource("res/textures/2.png");
+       System.out.println(texture);
     }
 
     private void setUpLight(double now)
@@ -157,7 +159,7 @@ public class Main  implements ValueSubmittedListener{
         windowWidth = 800;
         windowHeight = 600;
       
-        JFrame f = new JFrame();
+        f = new JFrame();
         
         webgl_container = new Canvas();
         ShaderListPanel shaderlistPanel = new ShaderListPanel();
@@ -226,7 +228,6 @@ public class Main  implements ValueSubmittedListener{
             Display.create();
             Display.makeCurrent();      
             //Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-            Display.setTitle("Shader_Tut");
             //Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
@@ -253,7 +254,7 @@ public class Main  implements ValueSubmittedListener{
         //loadTex = new ImageSetup();
 
         setUpShader();
-        //setUpTextures();
+        setUpTextures();
         //setUpLight();
 
         long start = System.nanoTime();
@@ -307,7 +308,8 @@ public class Main  implements ValueSubmittedListener{
     	if (getTime() - lastFPS > 1000) {
     		Display.setTitle("FPS:" + fps);
     		//analyser.setFPS(fps);
-    		tabpane.setTitleAt(1, "Monitoring, FPS:" +fps);
+    		//tabpane.setTitleAt(1, "Monitoring, FPS:" +fps);
+    		f.setTitle("FPS: " +fps);
     		fps = 0;
     		lastFPS += 1000; // eine sekunde hinzufügen
     		
@@ -342,5 +344,6 @@ public class Main  implements ValueSubmittedListener{
 // 01. Restliche Uniforms auslesen und in den Shader übertragen (Texture etc)
 // 1.Shader nicht in jedem Frame neu auslesen bzw nur wenn live editor pane offen ist!
 // 2.Nur die benötigten Uniforms generieren und übertragen
+// 4. 4 Buffer wie bei https://www.shadertoy.com/view/lst3Df unterstützen
 
 

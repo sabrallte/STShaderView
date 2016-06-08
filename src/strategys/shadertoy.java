@@ -38,8 +38,8 @@ public class shadertoy  extends BaseStrategy{
 	
 	public shadertoy() {
 		init_options_panel();
-		VERTEX_SHADER_LOCATION = "res/shadertoy.vs";
-		FRAGMENT_SHADER_LOCATION = "res/shadertoy.fs";
+		VERTEX_SHADER_LOCATION = "res/shader/shadertoy.vs";
+		FRAGMENT_SHADER_LOCATION = "res/shader/shadertoy.fs";
 	}
 
 	
@@ -69,7 +69,7 @@ public class shadertoy  extends BaseStrategy{
         int iSampleRate = glGetUniformLocation(shaderProgram, "iSampleRate");
         
         //Floats
-        
+        System.out.println((float)(((float) Sys.getTime()) / Sys.getTimerResolution()  - start_time));
         glUniform1f(iGlobalTime,  (float)(((float) Sys.getTime()) / Sys.getTimerResolution()  - start_time)  ); //auf 4 Stellen genau
         glUniform1f(iTimeDelta, randomno.nextFloat() );
         glUniform4f(iChannelTime, (float)randomno.nextFloat() , (float)randomno.nextFloat() , (float)randomno.nextFloat() , (float)randomno.nextFloat() );
