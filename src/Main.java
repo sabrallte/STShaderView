@@ -11,18 +11,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Random;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -57,8 +64,6 @@ public class Main  implements ValueSubmittedListener{
     private int shaderProgram;
     private int windowWidth;
     private int windowHeight;
-    private  String VERTEX_SHADER_LOCATION = null;
-    private  String FRAGMENT_SHADER_LOCATION = null;
     private int texture;
     public shadertoy active_shader = new shadertoy();
     public Canvas webgl_container;
@@ -111,7 +116,6 @@ public class Main  implements ValueSubmittedListener{
     	
     	if (webcam.isReady()) {
     	       texture = loadTex.loadBufferedImage(webcam.takePicture(), 1);
-    	       System.out.println(texture);
     	       //texture = loadTex.loadImageSource("res/textures/1.png");
     	       texture = loadTex.loadImageSource("res/textures/2.png");
     	       texture = loadTex.loadImageSource("res/textures/1.png");
@@ -171,45 +175,26 @@ public class Main  implements ValueSubmittedListener{
 
     private void initGui(){
     	
-    	
+    	f = new JFrame();
+    	webgl_container = new Canvas();
         windowWidth = 800;
         windowHeight = 600;
-      
-        f = new JFrame();
         
-        webgl_container = new Canvas();
-        ShaderListPanel shaderlistPanel = new ShaderListPanel();
-        shaderlistPanel.addListener(this);
-        EditorPanel editorPanel = new EditorPanel();
-        DownloadPanel downloadPanel = new DownloadPanel();
         tabpane = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.WRAP_TAB_LAYOUT );
         
-        tabpane.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                System.out.println("Tab: " + tabpane.getSelectedIndex());
-                ITabbedPanel a = (ITabbedPanel) tabpane.getComponentAt(tabpane.getSelectedIndex());
-                a.onTabSelected();
-            }
-        });
+        ShaderListPanel shaderlistPanel = new ShaderListPanel();
+        EditorPanel editorPanel = new EditorPanel();
+        DownloadPanel downloadPanel = new DownloadPanel();
         
-        
-        f.addWindowListener(new WindowAdapter(){
-            public void windowClosing(WindowEvent e){
-            	destroy();
-            }
-        });
-        
-
-        active_shader =  new  shadertoy();
-  		active_shader.set_viewport_width(webgl_container.getWidth());
-  		active_shader.set_viewport_height(webgl_container.getHeight());
-  		editorPanel.setShader( active_shader);
-    
-        //Componenten den Parents hinzufügen
-        //tabpane.addTab("Performance", analyser.get_options_panel());
         tabpane.addTab("Available Shaders",shaderlistPanel);
         tabpane.addTab("Live Coding",editorPanel);
         tabpane.addTab("Download new Shaders",downloadPanel);
+        
+        
+        active_shader =  new shadertoy();
+  		active_shader.set_viewport_width(webgl_container.getWidth());
+  		active_shader.set_viewport_height(webgl_container.getHeight());
+  		editorPanel.setShader(active_shader);
         
         f.setLayout( new GridLayout(/*3*/ 0, 2) );
         f.getContentPane().add(webgl_container);
@@ -217,9 +202,18 @@ public class Main  implements ValueSubmittedListener{
         
         f.setBounds(0, 0, windowWidth, windowHeight);
         f.setVisible(true);
-        //f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setResizable(true);
+        
+        // LISTENER
+        
+        shaderlistPanel.addListener(this);
 
+        f.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+            	destroy();
+            }
+        });
+        
         f.addComponentListener(new ComponentListener() {
         	   @Override
         	   public void componentHidden(ComponentEvent e) {
@@ -227,7 +221,6 @@ public class Main  implements ValueSubmittedListener{
         	   }
         	   @Override
         	   public void componentMoved(ComponentEvent e) {
-        	      System.out.println("Moved");
         	   }
         	   @Override
         	   public void componentResized(ComponentEvent e) {
@@ -375,6 +368,7 @@ public class Main  implements ValueSubmittedListener{
 // 7. Mehr Informationen zu den Shadern berreitstellen (mgl. Inputs, shader selber bennenen)
 // MousePos nur abfragen wenn sie auch im Canvas ist
 // 8. refreshWebcamPicture nur wenn ein Shader aktiv der auch die Webcam nutzt
+// 9 Visualisierungs Fenster von ControllerFenster abkoppeln
 
 
 
