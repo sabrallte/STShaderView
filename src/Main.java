@@ -65,6 +65,7 @@ public class Main  implements ValueSubmittedListener{
     public shadertoy active_shader = new shadertoy();
     public PerformanceAnalyser analyser = new PerformanceAnalyser();
     public Canvas webgl_container;
+    public boolean reload_shader_requested = false;
     
     // GUI
     JTabbedPane tabpane;
@@ -83,6 +84,7 @@ public class Main  implements ValueSubmittedListener{
     public void onSubmitted(String value) {
         System.out.println("Change Shader to: " + value);
         active_shader.setFragmentShaderLocation(value);
+        reload_shader_requested = true;
     }
     
     private void setUpShader()
@@ -101,11 +103,11 @@ public class Main  implements ValueSubmittedListener{
 
     private void setUpTextures()
     {
-       texture = loadTex.loadImageSource("res/textures/1.png");
-       texture = loadTex.loadImageSource("res/textures/2.png");
-       texture = loadTex.loadImageSource("res/textures/1.png");
-       texture = loadTex.loadImageSource("res/textures/2.png");
-       System.out.println(texture);
+//       texture = loadTex.loadImageSource("res/textures/1.png");
+//       texture = loadTex.loadImageSource("res/textures/2.png");
+//       texture = loadTex.loadImageSource("res/textures/1.png");
+//       texture = loadTex.loadImageSource("res/textures/2.png");
+//       System.out.println(texture);
     }
 
     private void setUpLight(double now)
@@ -181,9 +183,6 @@ public class Main  implements ValueSubmittedListener{
   		active_shader.set_viewport_width(webgl_container.getWidth());
   		active_shader.set_viewport_height(webgl_container.getHeight());
   		editorPanel.setShader( active_shader);
-
-        
-        
     
         //Componenten den Parents hinzufügen
         //tabpane.addTab("Performance", analyser.get_options_panel());
@@ -252,7 +251,6 @@ public class Main  implements ValueSubmittedListener{
         shaderSetup = new ShaderSetup();
         //geometry = new Geometry();
         //loadTex = new ImageSetup();
-
         setUpShader();
         setUpTextures();
         //setUpLight();
@@ -271,20 +269,13 @@ public class Main  implements ValueSubmittedListener{
             Display.update();
             updateFPS();
             setUpLight(now);
-            if (!analyser.isEnabled()) {
-                //Display.setVSyncEnabled(true);
-                
-                //Display.sync(60);
-                //System.out.println("no monitor");
-            }
-            else {
-            	
-                Display.setVSyncEnabled(false);
-                //Display.sync(60);
-            }
-            
+        	Display.sync(60);
+            //Display.setVSyncEnabled(false);
+            //Display.sync(60);
+
+        	
             //Shader in jedem Frame neuladen, das ermöglicht Live im Shadercode änderungen vorzunehmen
-            setUpShader();
+        	if (reload_shader_requested) {setUpShader();}
         }
 
         glDeleteProgram(shaderProgram);
@@ -339,11 +330,18 @@ public class Main  implements ValueSubmittedListener{
 
 
 //TODO:
-
 // 0. convertShaderToyToGLSL muss noch die Uniform in den shadercode schreiben!
 // 01. Restliche Uniforms auslesen und in den Shader übertragen (Texture etc)
 // 1.Shader nicht in jedem Frame neu auslesen bzw nur wenn live editor pane offen ist!
 // 2.Nur die benötigten Uniforms generieren und übertragen
 // 4. 4 Buffer wie bei https://www.shadertoy.com/view/lst3Df unterstützen
+// 5. keine VR shader erlauben bzw so anpassen dass diese wieder funktionieren
+//	-> void mainVR( , in vec3 fragRayOri, in vec3 fragRayDir ) {
+//	    gl_FragColor = render(fragRayOri, fragRayDir);
+//	}
+// 6. Performance optimieren (Uniforms nur wenn notwendig erfassen und weiterreichen, etc)
+// 7. Mehr Informationen zu den Shadern berreitstellen (mgl. Inputs, shader selber bennenen)
+// MousePos nur abfragen wenn sie auch im Canvas ist
+
 
 

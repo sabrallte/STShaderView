@@ -41,17 +41,18 @@ public class DownloadPanel extends JPanel implements ITabbedPanel {
 
 				SourceCodeLoader scl = new SourceCodeLoader();
 
-				if (scl.load(textfield_url.getText()) == null) {
+				if (scl.load(textfield_url.getText(), false) == null) {
 					String[] optional_shaders = new String[] {};
 					optional_shaders = scl.getOptionalShaders();
 					String selection = showDialog(optional_shaders);
 
-					if ( (selection!= null) && (scl.load(selection) != null)) {}
+					if ( (selection!= null) && (scl.load(selection, true) != null)) {}
 					else{
 						System.out.println("ERROR: Could not load Shader %s".format(selection));
+						textfield_url.setText("ERROR: Could not load Shader %s".format(selection));
 					}
 				}
-				System.out.println("Download Finished");
+				textfield_url.setText("Download Finished!");
 			}
 		});
 
@@ -64,7 +65,6 @@ public class DownloadPanel extends JPanel implements ITabbedPanel {
 
 	public String showDialog(String[] optional_shaders) {
 		ImageIcon icon = new ImageIcon();
-    	Object[] possibilities = {"ham", "spam", "yam"};
     	String s = (String)JOptionPane.showInputDialog(
     	                    this,
     	                    "There is more than one Shader\n"

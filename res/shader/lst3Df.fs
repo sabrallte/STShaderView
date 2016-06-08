@@ -15,7 +15,6 @@ uniform sampler2D iChannel3;
 uniform vec4      iDate;                 // (year, month, day, time in seconds)
 uniform float     iSampleRate;           // sound sample rate (i.e., 44100)
 
-
 vec3 srgb2lin(vec3 c) { return c*c; }
 vec3 lin2srgb(vec3 c) { return sqrt(c); }
 

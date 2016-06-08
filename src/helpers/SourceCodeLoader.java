@@ -107,7 +107,8 @@ public class SourceCodeLoader {
 		// deb Wert Ms2SD1
 		
 		URL url;
-		try {
+		System.out.println("getIDfromURL: " + website_url);
+		try { 
 			url = new URL(website_url);
 			return url.getFile().split("/")[2];
 		} catch (MalformedURLException e) {
@@ -165,22 +166,22 @@ public class SourceCodeLoader {
 		shader_source = shader_source.replaceAll("mainImage", "main");
 		shader_source = shader_source.replaceAll("out vec4 gl_FragColor, in vec2 gl_FragCoord", "");
 		
-		String uniforms = 	"uniform vec3      iResolution;           // viewport resolution (in pixels)\r\n" + 
-							"uniform float     iGlobalTime;           // shader playback time (in seconds)\r\n" + 
-							"uniform float     iTimeDelta;            // render time (in seconds)\r\n" + 
-							"uniform int       iFrame;                // shader playback frame\r\n" + 
-							"uniform float     iChannelTime[4];       // channel playback time (in seconds)\r\n" + 
-							"uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)\r\n" + 
-							"uniform vec4      iMouse;                // mouse pixel coords. xy: current (if MLB down), zw: click\r\n" + 
-							"\r\n" + 
-							"//uniform samplerXX iChannel0..3;          // input channel. XX = 2D/Cube\r\n" + 
-							"uniform sampler2D iChannel0;\r\n" + 
-							"uniform sampler2D iChannel1;\r\n" + 
-							"uniform sampler2D iChannel2;\r\n" + 
-							"uniform sampler2D iChannel3;\r\n" + 
-							"\r\n" + 
-							"uniform vec4      iDate;                 // (year, month, day, time in seconds)\r\n" + 
-							"uniform float     iSampleRate;           // sound sample rate (i.e., 44100)\r\n\n"; 
+		String uniforms = 	"uniform vec3      iResolution;           // viewport resolution (in pixels)\n" + 
+							"uniform float     iGlobalTime;           // shader playback time (in seconds)\n" + 
+							"uniform float     iTimeDelta;            // render time (in seconds)\n" + 
+							"uniform int       iFrame;                // shader playback frame\n" + 
+							"uniform float     iChannelTime[4];       // channel playback time (in seconds)\n" + 
+							"uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)\n" + 
+							"uniform vec4      iMouse;                // mouse pixel coords. xy: current (if MLB down), zw: click\n" + 
+							"\n" + 
+							"//uniform samplerXX iChannel0..3;          // input channel. XX = 2D/Cube\n" + 
+							"uniform sampler2D iChannel0;\n" + 
+							"uniform sampler2D iChannel1;\n" + 
+							"uniform sampler2D iChannel2;\n" + 
+							"uniform sampler2D iChannel3;\n" + 
+							"\n" + 
+							"uniform vec4      iDate;                 // (year, month, day, time in seconds)\n" + 
+							"uniform float     iSampleRate;           // sound sample rate (i.e., 44100)\n\n"; 
 		
 		shader_source = uniforms + shader_source;
 		
@@ -209,14 +210,24 @@ public class SourceCodeLoader {
 		
 	}
 	
-	public String load(String web_url) {
-		String id;
+	public String load(String web_url, boolean is_ID) {
+		
+		/*
+		 * Als web_url werden URLS oder IDS akzeptiert -> is_ID = true
+		 * 
+		 * */
+		
+		
+		String id ="";
 		String source_code;
 		String shader_code;
 		String save_to_path = "res/shader/";
 		
 		
-		id =  getIDfromURL(web_url);
+		if (!is_ID) {
+			id =  getIDfromURL(web_url);
+		}else {id = web_url;}
+		
 		source_code =  loadFromID(id);
 		shader_code =  decodeJSON(source_code);
 		
@@ -253,7 +264,7 @@ public class SourceCodeLoader {
 		String web_url ="https://www.shadertoy.com/view/Ms2SD1";
 		
 		SourceCodeLoader scl = new SourceCodeLoader();
-		System.out.println(scl.load(web_url));
+		System.out.println(scl.load(web_url, false));
 	}
 
 }

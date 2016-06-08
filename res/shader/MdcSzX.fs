@@ -15,10 +15,11 @@ uniform sampler2D iChannel3;
 uniform vec4      iDate;                 // (year, month, day, time in seconds)
 uniform float     iSampleRate;           // sound sample rate (i.e., 44100)
 
-// "Seascape" by Alexander Alekseev aka TDM - 2014
-// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
-// hacked into dunes by boinx
-// 
+/*
+"Seascape" by Alexander Alekseev aka TDM - 2014
+License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+Contact: tdmaav@gmail.com
+*/
 
 const int NUM_STEPS = 8;
 const float PI	 	= 3.1415;
@@ -28,12 +29,12 @@ float EPSILON_NRM	= 0.1 / iResolution.x;
 // sea
 const int ITER_GEOMETRY = 3;
 const int ITER_FRAGMENT = 5;
-const float SEA_HEIGHT = 0.766;
-const float SEA_CHOPPY = 1.8;
-const float SEA_SPEED = 0.20;
-const float SEA_FREQ = 0.056;
-const vec3 SEA_BASE = vec3(0.4650,0.3850,0.250);
-const vec3 SEA_WATER_COLOR = vec3(0.87,0.780,0.670);
+const float SEA_HEIGHT = 0.6;
+const float SEA_CHOPPY = 4.0;
+const float SEA_SPEED = 0.8;
+const float SEA_FREQ = 0.16;
+const vec3 SEA_BASE = vec3(0.1,0.19,0.22);
+const vec3 SEA_WATER_COLOR = vec3(0.8,0.9,0.6);
 float SEA_TIME = iGlobalTime * SEA_SPEED;
 mat2 octave_m = mat2(1.6,1.2,-1.2,1.6);
 
@@ -75,9 +76,9 @@ float specular(vec3 n,vec3 l,vec3 e,float s) {
 vec3 getSkyColor(vec3 e) {
     e.y = max(e.y,0.0);
     vec3 ret;
-    ret.x = pow(1.0-e.y,1.0);
+    ret.x = pow(1.0-e.y,2.0);
     ret.y = 1.0-e.y;
-    ret.z = 0.6+(1.0-e.y)*0.24;
+    ret.z = 0.6+(1.0-e.y)*0.4;
     return ret;
 }
 
@@ -128,7 +129,7 @@ vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
     float fresnel = 1.0 - max(dot(n,-eye),0.0);
     fresnel = pow(fresnel,3.0) * 0.65;
         
-    vec3 reflected = getSkyColor(reflect(eye,n*.5));    
+    vec3 reflected = getSkyColor(reflect(eye,n));    
     vec3 refracted = SEA_BASE + diffuse(n,l,80.0) * SEA_WATER_COLOR * 0.12; 
     
     vec3 color = mix(refracted,reflected,fresnel);
@@ -174,6 +175,25 @@ float heightMapTracing(vec3 ori, vec3 dir, out vec3 p) {
 }
 
 // main
+vec4 render( in vec3 ori, in vec3 dir ) { 
+    // tracing
+    vec3 p;
+    heightMapTracing(ori,dir,p);
+    vec3 dist = p - ori;
+    vec3 n = getNormal(p, dot(dist,dist) * EPSILON_NRM);
+    vec3 light = normalize(vec3(0.0,1.0,0.8)); 
+             
+    // color
+    vec3 color = mix(
+        getSkyColor(dir),
+        getSeaColor(p,n,light,dir,dist),
+    	pow(smoothstep(0.0,-0.05,dir.y),0.3));
+        
+    // post
+	return vec4(pow(color,vec3(0.75)), 1.0);
+}
+
+// main
 void main(  ) {
 	vec2 uv = gl_FragCoord.xy / iResolution.xy;
     uv = uv * 2.0 - 1.0;
@@ -181,26 +201,13 @@ void main(  ) {
     float time = iGlobalTime * 0.3 + iMouse.x*0.01;
         
     // ray
-    //vec3 ang = vec3(sin(3.0)*0.01,sin(1.0)*0.02+0.3,.7);
-    vec3 ang = vec3(.010,.3,.758);
-    vec3 ori = vec3(0.0,3.5,time*5.0*.012);
-    vec3 dir = normalize(vec3(uv.xy,-2.0)); dir.z += length(uv) * 0.0715;
+    vec3 ang = vec3(sin(time*3.0)*0.1,sin(time)*0.2+0.3,time);    
+    vec3 ori = vec3(0.0,3.5,time*5.0);
+    vec3 dir = normalize(vec3(uv.xy,-2.0)); dir.z += length(uv) * 0.15;
     dir = normalize(dir) * fromEuler(ang);
-    
-    // tracing
-    vec3 p;
-    heightMapTracing(ori,dir,p);
-    vec3 dist = p - ori ;
-    vec3 n = getNormal(p, dot(dist,dist) * EPSILON_NRM);
-    vec3 light = normalize(vec3(0.10,1.0,0.8)); 
-             
-    // color
-    vec3 color = mix(
-        getSkyColor(dir),
-        //getSeaColor(p,n,light,dir,dist)* .75,
-        getSeaColor(p,n,light,dir,dist),
-    	pow(smoothstep(0.0,-0.675,dir.y),0.23));
+
         
     // post
-	gl_FragColor = vec4(pow(color,vec3(0.85)), .5);
+	gl_FragColor = render(ori, dir);
 }
+

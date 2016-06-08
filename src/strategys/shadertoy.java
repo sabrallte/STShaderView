@@ -69,7 +69,6 @@ public class shadertoy  extends BaseStrategy{
         int iSampleRate = glGetUniformLocation(shaderProgram, "iSampleRate");
         
         //Floats
-        System.out.println((float)(((float) Sys.getTime()) / Sys.getTimerResolution()  - start_time));
         glUniform1f(iGlobalTime,  (float)(((float) Sys.getTime()) / Sys.getTimerResolution()  - start_time)  ); //auf 4 Stellen genau
         glUniform1f(iTimeDelta, randomno.nextFloat() );
         glUniform4f(iChannelTime, (float)randomno.nextFloat() , (float)randomno.nextFloat() , (float)randomno.nextFloat() , (float)randomno.nextFloat() );
@@ -81,7 +80,15 @@ public class shadertoy  extends BaseStrategy{
         
         
         //vec4
-        glUniform4f(iMouse, (float) MouseInfo.getPointerInfo().getLocation().getX(),(float) MouseInfo.getPointerInfo().getLocation().getY(),  (float) (Mouse.isButtonDown(0)? 1 : 0),(float) (Mouse.isButtonDown(1)? 1 : 0));
+        
+        try {
+        	glUniform4f(iMouse, (float) MouseInfo.getPointerInfo().getLocation().getX(),(float) MouseInfo.getPointerInfo().getLocation().getY(),  (float) (Mouse.isButtonDown(0)? 1 : 0),(float) (Mouse.isButtonDown(1)? 1 : 0));
+        	}
+        catch (Exception e) {
+        	System.out.println("Error while passing MouseInfo into the Shader");
+        	glUniform4f(iMouse, 0,0,0,0);
+        }
+        
         glUniform4i(iDate, LocalDateTime.now().getYear(),  LocalDateTime.now().getMonthValue(),LocalDateTime.now().getMinute(), LocalDateTime.now().getSecond()); //(year, month, day, time in seconds)
         
         //int
