@@ -77,7 +77,7 @@ public class ShaderListPanel extends JPanel  implements ITabbedPanel{
 	
 	public List<String> readShaderDir() {
 		
-		Path p1 = Paths.get("res/shader/");
+		Path p1 = Paths.get("res/shader/fragment/");
 		shader_list = new ArrayList<String>();
 		shader_list_fullpath = new ArrayList<String>();
 		

@@ -38,8 +38,8 @@ public class shadertoy  extends BaseStrategy{
 	
 	public shadertoy() {
 		init_options_panel();
-		VERTEX_SHADER_LOCATION = "res/shader/shadertoy.vs";
-		FRAGMENT_SHADER_LOCATION = "res/shader/shadertoy.fs";
+		VERTEX_SHADER_LOCATION = "res/shader/vertex/shadertoy.vs";
+		FRAGMENT_SHADER_LOCATION = "res/shader/fragment/shadertoy2.fs";
 	}
 
 	

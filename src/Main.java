@@ -103,10 +103,10 @@ public class Main  implements ValueSubmittedListener{
 
     private void setUpTextures()
     {
-//       texture = loadTex.loadImageSource("res/textures/1.png");
-//       texture = loadTex.loadImageSource("res/textures/2.png");
-//       texture = loadTex.loadImageSource("res/textures/1.png");
-//       texture = loadTex.loadImageSource("res/textures/2.png");
+       texture = loadTex.loadImageSource("res/textures/1.png");
+       texture = loadTex.loadImageSource("res/textures/2.png");
+       texture = loadTex.loadImageSource("res/textures/1.png");
+       texture = loadTex.loadImageSource("res/textures/2.png");
 //       System.out.println(texture);
     }
 
