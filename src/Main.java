@@ -73,6 +73,7 @@ public class Main  implements ValueSubmittedListener{
     // GUI
     JTabbedPane tabpane;
     JFrame f;
+    JFrame f_visual= new JFrame();
     
     //GUI - Parameter
     float valOftextSliderMultiplicator = 0;
@@ -176,6 +177,8 @@ public class Main  implements ValueSubmittedListener{
     private void initGui(){
     	
     	f = new JFrame();
+    	f_visual= new JFrame();
+    	
     	webgl_container = new Canvas();
         windowWidth = 800;
         windowHeight = 600;
@@ -196,13 +199,17 @@ public class Main  implements ValueSubmittedListener{
   		active_shader.set_viewport_height(webgl_container.getHeight());
   		editorPanel.setShader(active_shader);
         
-        f.setLayout( new GridLayout(/*3*/ 0, 2) );
-        f.getContentPane().add(webgl_container);
-        f.getContentPane().add(tabpane,   BorderLayout.EAST);
+        f_visual.getContentPane().add(webgl_container);
+        f.getContentPane().add(tabpane);
         
-        f.setBounds(0, 0, windowWidth, windowHeight);
+        f.setBounds(windowWidth, 0, 400, windowHeight);
         f.setVisible(true);
         f.setResizable(true);
+        
+        f_visual.setBounds(0, 0, windowWidth, windowHeight);
+        f_visual.setVisible(true);
+        f_visual.setResizable(true);
+        
         
         // LISTENER
         
@@ -214,7 +221,7 @@ public class Main  implements ValueSubmittedListener{
             }
         });
         
-        f.addComponentListener(new ComponentListener() {
+        f_visual.addComponentListener(new ComponentListener() {
         	   @Override
         	   public void componentHidden(ComponentEvent e) {
         		   System.out.println("Hidden");
@@ -224,8 +231,8 @@ public class Main  implements ValueSubmittedListener{
         	   }
         	   @Override
         	   public void componentResized(ComponentEvent e) {
-        	      windowWidth = f.getWidth();
-        	      windowHeight = f.getHeight();
+        	      windowWidth = f_visual.getWidth();
+        	      windowHeight = f_visual.getHeight();
         	      
         	      active_shader.set_viewport_width(Display.getWidth());
         	      active_shader.set_viewport_height(Display.getHeight());
