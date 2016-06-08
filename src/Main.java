@@ -32,21 +32,17 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-import analytics.PerformanceAnalyser;
+
+
 import initSetups.ShaderSetup;
 import interfaces.ITabbedPanel;
 import interfaces.ValueSubmittedListener;
 import strategys.BaseStrategy;
-import strategys.DiffuseReflexion;
-import strategys.DiffuseReflexionSpotlight;
-import strategys.PhongShader;
-import strategys.PhongShaderWithHalfway;
-import strategys.PhongShaderWithHalfwayAndCase;
-import strategys.PhongShaderWithHalfwayAndCaseAndSchlick;
 import strategys.shadertoy;
 import ui.DownloadPanel;
 import ui.EditorPanel;
 import ui.ShaderListPanel;
+import webcam.WebcamController;
 import initSetups.Geometry;
 import initSetups.BufferSetup;
 import initSetups.ImageSetup;
@@ -63,7 +59,6 @@ public class Main  implements ValueSubmittedListener{
     private  String FRAGMENT_SHADER_LOCATION = null;
     private int texture;
     public shadertoy active_shader = new shadertoy();
-    public PerformanceAnalyser analyser = new PerformanceAnalyser();
     public Canvas webgl_container;
     public boolean reload_shader_requested = false;
     
@@ -74,12 +69,19 @@ public class Main  implements ValueSubmittedListener{
     //GUI - Parameter
     float valOftextSliderMultiplicator = 0;
     
+    //Webcam
+    WebcamController webcam;
+    
     //Monitoring
     long lastFPS = 0;
     long fps = 0;
     
     long fp10ms = 0;
     long lastFP10ms = 0;
+    
+    public Main() {
+    	webcam = new WebcamController();
+    }
 
     public void onSubmitted(String value) {
         System.out.println("Change Shader to: " + value);
@@ -103,11 +105,24 @@ public class Main  implements ValueSubmittedListener{
 
     private void setUpTextures()
     {
-       texture = loadTex.loadImageSource("res/textures/1.png");
-       texture = loadTex.loadImageSource("res/textures/2.png");
-       texture = loadTex.loadImageSource("res/textures/1.png");
-       texture = loadTex.loadImageSource("res/textures/2.png");
-//       System.out.println(texture);
+    	
+    	if (webcam.isReady()) {
+    	       texture = loadTex.loadBufferedImage(webcam.takePicture(), 1);
+    	       System.out.println(texture);
+    	       //texture = loadTex.loadImageSource("res/textures/1.png");
+    	       texture = loadTex.loadImageSource("res/textures/2.png");
+    	       texture = loadTex.loadImageSource("res/textures/1.png");
+    	       texture = loadTex.loadImageSource("res/textures/2.png");
+    	}
+
+    }
+    
+    private void refreshWebcamPicture() {
+    	if (webcam.isReady()) {
+ 	       texture = loadTex.loadBufferedImage(webcam.takePicture(), 1);
+    	}
+    	
+    	
     }
 
     private void setUpLight(double now)
@@ -276,6 +291,7 @@ public class Main  implements ValueSubmittedListener{
         	
             //Shader in jedem Frame neuladen, das ermöglicht Live im Shadercode änderungen vorzunehmen
         	if (reload_shader_requested) {setUpShader();}
+        	refreshWebcamPicture();
         }
 
         glDeleteProgram(shaderProgram);
@@ -290,7 +306,6 @@ public class Main  implements ValueSubmittedListener{
     	
     	
     	if (getTime() - lastFP10ms > 10) { //10ms
-    		analyser.set10ms(fp10ms);
     		fp10ms = 0;
     		lastFP10ms+=10;
     	}
@@ -342,6 +357,7 @@ public class Main  implements ValueSubmittedListener{
 // 6. Performance optimieren (Uniforms nur wenn notwendig erfassen und weiterreichen, etc)
 // 7. Mehr Informationen zu den Shadern berreitstellen (mgl. Inputs, shader selber bennenen)
 // MousePos nur abfragen wenn sie auch im Canvas ist
+// 8. refreshWebcamPicture nur wenn ein Shader aktiv der auch die Webcam nutzt
 
 
 
