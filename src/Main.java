@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -61,6 +63,7 @@ public class Main  implements ValueSubmittedListener{
     public shadertoy active_shader = new shadertoy();
     public Canvas webgl_container;
     public boolean reload_shader_requested = false;
+    public boolean running = true;
     
     // GUI
     JTabbedPane tabpane;
@@ -127,19 +130,15 @@ public class Main  implements ValueSubmittedListener{
 
     private void setUpLight(double now)
     {
-    	
 
         glShadeModel(GL_SMOOTH);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
         //glDisable(GL_LIGHTING);
-
-        
         
         glEnable(GL_LIGHT0);
         glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferSetup.asFlippedFloatBuffer(new float[]{0.0f, 0.0f, 0.0f, 1f}));
         //glLight(GL_LIGHT0, GL_POSITION, BufferSetup.asFlippedFloatBuffer(new float[]{5, 5, 2, 0.5f}));
-        
         
         //dynamisches Licht
         glLight(GL_LIGHT0, GL_POSITION, BufferSetup.asFlippedFloatBuffer(new float[]{(float)Math.sin(now)*10, (float)Math.cos(now)*10, 1, 0.9f}));
@@ -193,6 +192,13 @@ public class Main  implements ValueSubmittedListener{
             }
         });
         
+        
+        f.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+            	destroy();
+            }
+        });
+        
 
         active_shader =  new  shadertoy();
   		active_shader.set_viewport_width(webgl_container.getWidth());
@@ -211,7 +217,7 @@ public class Main  implements ValueSubmittedListener{
         
         f.setBounds(0, 0, windowWidth, windowHeight);
         f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setResizable(true);
 
         f.addComponentListener(new ComponentListener() {
@@ -251,6 +257,17 @@ public class Main  implements ValueSubmittedListener{
         }
     }
     
+    public void destroy() {
+    	running = false;
+    	webcam.deactivate();
+    	try {
+    	    Thread.sleep(1000);                 //1000 milliseconds is one second.
+    	} catch(InterruptedException ex) {
+    	    Thread.currentThread().interrupt();
+    	}
+        System.exit(0);//cierra aplicacion
+    }
+    
     public void run()
     {
     	initGui();
@@ -273,8 +290,8 @@ public class Main  implements ValueSubmittedListener{
         long start = System.nanoTime();
         lastFPS = getTime();
         lastFP10ms = getTime();
-        while(!Display.isCloseRequested() && !Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
-        
+        while(running && !Display.isCloseRequested() && !Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+        	
         {
         	//Resize des Frames im Viewport anpassen
         	if (Display.wasResized()) GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
@@ -296,7 +313,7 @@ public class Main  implements ValueSubmittedListener{
 
         glDeleteProgram(shaderProgram);
         Display.destroy();
-        System.exit(0);
+        //System.exit(0);
     }
 
     public void updateFPS() {

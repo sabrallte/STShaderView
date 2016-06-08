@@ -10,6 +10,7 @@ import com.github.sarxos.webcam.Webcam;
 
 public class WebcamController {
 	Webcam webcam;
+	boolean running = true;
 	public WebcamController() {
 		// get default webcam and open it
 		webcam = Webcam.getDefault();
@@ -18,10 +19,14 @@ public class WebcamController {
 
 	
 	public boolean isReady() {
-		if (webcam == null) {
+		if (webcam == null || !running) {
 			return false;
 		}
 		else {return true;}
+	}
+	
+	public void deactivate() {
+		running = false;
 	}
 	
 	public BufferedImage takePicture() {
@@ -40,6 +45,11 @@ public class WebcamController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void destroy() {
+		webcam.close();
+		webcam = null;
 	}
 	
 	public static void main(String[] args) {
