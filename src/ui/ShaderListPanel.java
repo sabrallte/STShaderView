@@ -20,7 +20,7 @@ import javax.swing.event.ListSelectionListener;
 
 import helpers.SourceCodeLoader;
 import interfaces.ITabbedPanel;
-import interfaces.ValueSubmittedListener;
+import interfaces.IValueSubmittedListener;
 import strategys.shadertoy;
 
 public class ShaderListPanel extends JPanel  implements ITabbedPanel{
@@ -97,14 +97,11 @@ public class ShaderListPanel extends JPanel  implements ITabbedPanel{
 		
 	}
 	
-	public void setShader(shadertoy  active_shader) {
-		shader = (shadertoy) active_shader;
-	}
 	
-	private List<ValueSubmittedListener> listeners = new ArrayList<ValueSubmittedListener>();
+	private List<IValueSubmittedListener> listeners = new ArrayList<IValueSubmittedListener>();
 
 
-    public void addListener(ValueSubmittedListener listener) {
+    public void addListener(IValueSubmittedListener listener) {
         listeners.add(listener);
     }
 
@@ -112,7 +109,7 @@ public class ShaderListPanel extends JPanel  implements ITabbedPanel{
     	
     	if (list.getSelectedIndex() < 0) {return;}
     	
-        for (ValueSubmittedListener listener : listeners) {
+        for (IValueSubmittedListener listener : listeners) {
             listener.onSubmitted(shader_list_fullpath.get(list.getSelectedIndex()));
         }
     }
@@ -121,6 +118,13 @@ public class ShaderListPanel extends JPanel  implements ITabbedPanel{
 	@Override
 	public void onTabSelected() {
 		System.out.println("selected available shaders");
+		
+	}
+
+
+	@Override
+	public void setActiveShader(shadertoy shader) {
+		shader = (shadertoy) shader;
 		
 	}
 

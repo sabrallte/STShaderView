@@ -45,18 +45,19 @@ import org.lwjgl.opengl.GL11;
 
 import initSetups.ShaderSetup;
 import interfaces.ITabbedPanel;
-import interfaces.ValueSubmittedListener;
+import interfaces.IValueSubmittedListener;
 import strategys.BaseStrategy;
 import strategys.shadertoy;
 import ui.DownloadPanel;
 import ui.EditorPanel;
+import ui.NodeEditorPanel;
 import ui.ShaderListPanel;
 import webcam.WebcamController;
 import initSetups.Geometry;
 import initSetups.BufferSetup;
 import initSetups.ImageSetup;
 
-public class Main  implements ValueSubmittedListener{
+public class Main  implements IValueSubmittedListener{
 
     private Geometry geometry;
     private ShaderSetup shaderSetup;
@@ -72,7 +73,7 @@ public class Main  implements ValueSubmittedListener{
     
     // GUI
     JTabbedPane tabpane;
-    JFrame f;
+    JFrame f_controll;
     JFrame f_visual= new JFrame();
     
     //GUI - Parameter
@@ -176,7 +177,7 @@ public class Main  implements ValueSubmittedListener{
 
     private void initGui(){
     	
-    	f = new JFrame();
+    	f_controll = new JFrame();
     	f_visual= new JFrame();
     	
     	webgl_container = new Canvas();
@@ -188,23 +189,24 @@ public class Main  implements ValueSubmittedListener{
         ShaderListPanel shaderlistPanel = new ShaderListPanel();
         EditorPanel editorPanel = new EditorPanel();
         DownloadPanel downloadPanel = new DownloadPanel();
+        NodeEditorPanel nodePanel = new NodeEditorPanel();
         
         tabpane.addTab("Available Shaders",shaderlistPanel);
         tabpane.addTab("Live Coding",editorPanel);
         tabpane.addTab("Download new Shaders",downloadPanel);
+        tabpane.addTab("Node Editor", nodePanel);
         
         
         active_shader =  new shadertoy();
   		active_shader.set_viewport_width(webgl_container.getWidth());
   		active_shader.set_viewport_height(webgl_container.getHeight());
-  		editorPanel.setShader(active_shader);
         
         f_visual.getContentPane().add(webgl_container);
-        f.getContentPane().add(tabpane);
+        f_controll.getContentPane().add(tabpane);
         
-        f.setBounds(windowWidth, 0, 400, windowHeight);
-        f.setVisible(true);
-        f.setResizable(true);
+        f_controll.setBounds(windowWidth, 0, 600, windowHeight);
+        f_controll.setVisible(true);
+        f_controll.setResizable(true);
         
         f_visual.setBounds(0, 0, windowWidth, windowHeight);
         f_visual.setVisible(true);
@@ -214,8 +216,17 @@ public class Main  implements ValueSubmittedListener{
         // LISTENER
         
         shaderlistPanel.addListener(this);
+        
+        tabpane.addChangeListener(new ChangeListener() {
+        	public void stateChanged(ChangeEvent e) {
+        		ITabbedPanel selected_tab = (ITabbedPanel) tabpane.getComponentAt(tabpane.getSelectedIndex());
+        		selected_tab.setActiveShader(active_shader);
+        		selected_tab.onTabSelected();
+        	}
+        });
+        
 
-        f.addWindowListener(new WindowAdapter(){
+        f_controll.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e){
             	destroy();
             }
@@ -332,7 +343,7 @@ public class Main  implements ValueSubmittedListener{
     		Display.setTitle("FPS:" + fps);
     		//analyser.setFPS(fps);
     		//tabpane.setTitleAt(1, "Monitoring, FPS:" +fps);
-    		f.setTitle("FPS: " +fps);
+    		f_controll.setTitle("FPS: " +fps);
     		fps = 0;
     		lastFPS += 1000; // eine sekunde hinzufügen
     		

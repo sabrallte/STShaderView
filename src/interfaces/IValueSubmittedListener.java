@@ -1,5 +1,5 @@
 package interfaces;
 
-public interface ValueSubmittedListener {
+public interface IValueSubmittedListener {
 	public void onSubmitted(String value);
 }

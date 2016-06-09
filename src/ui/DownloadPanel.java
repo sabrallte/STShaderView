@@ -23,7 +23,7 @@ import javax.swing.event.ListSelectionListener;
 
 import helpers.SourceCodeLoader;
 import interfaces.ITabbedPanel;
-import interfaces.ValueSubmittedListener;
+import interfaces.IValueSubmittedListener;
 import strategys.shadertoy;
 
 public class DownloadPanel extends JPanel implements ITabbedPanel {
@@ -86,21 +86,27 @@ public class DownloadPanel extends JPanel implements ITabbedPanel {
 
 	
 	
-	private List<ValueSubmittedListener> listeners = new ArrayList<ValueSubmittedListener>();
+	private List<IValueSubmittedListener> listeners = new ArrayList<IValueSubmittedListener>();
 
-    public void addListener(ValueSubmittedListener listener) {
+    public void addListener(IValueSubmittedListener listener) {
         listeners.add(listener);
     }
 
     private void notifyListeners() {
-    	for (ValueSubmittedListener listener : listeners) {
+    	for (IValueSubmittedListener listener : listeners) {
     		listener.onSubmitted("");
     	}
     }
     
     @Override
 	public void onTabSelected() {
-		System.out.println("selected download");
+	}
+
+
+	@Override
+	public void setActiveShader(shadertoy shader) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

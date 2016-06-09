@@ -23,7 +23,7 @@ import javax.swing.event.ListSelectionListener;
 import helpers.IO;
 import helpers.SourceCodeLoader;
 import interfaces.ITabbedPanel;
-import interfaces.ValueSubmittedListener;
+import interfaces.IValueSubmittedListener;
 import strategys.shadertoy;
 import javax.swing.JEditorPane;
 
@@ -61,18 +61,22 @@ public class EditorPanel extends JPanel  implements ITabbedPanel{
 
 	}
 	
-	public void setShader(shadertoy  active_shader) {
-		shader = (shadertoy) active_shader;
-	}
-	
 	@Override
 	public void onTabSelected() {
 		editor.setText(readShaderCode());
 	}
 	
 	public String readShaderCode() {
+		if(shader == null) {return "ERROR: Kein aktiver Shader gesetzt!";}
+		
 		String path = shader.getFragmentShaderLocation();
 		return IO.readFile(path);
+	}
+
+	@Override
+	public void setActiveShader(shadertoy shader) {
+			System.out.println("Shader gesetzt: "+ shader.toString());
+			this.shader = (shadertoy) shader;
 	}
 	
 
