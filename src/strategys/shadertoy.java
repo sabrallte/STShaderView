@@ -101,7 +101,7 @@ public class shadertoy  extends BaseStrategy{
         glUniform1f(iGlobalTime,  (float)(((float) Sys.getTime()) / Sys.getTimerResolution()  - start_time)  ); //auf 4 Stellen genau
         glUniform1f(iTimeDelta, randomno.nextFloat() );
         glUniform4f(iChannelTime, (float)randomno.nextFloat() , (float)randomno.nextFloat() , (float)randomno.nextFloat() , (float)randomno.nextFloat() );
-        glUniform1f(iSampleRate, randomno.nextFloat() * 44100);
+        glUniform1f(iSampleRate, (float) uniform_provider.getiSampleRate());
 
         //vec3
     	glUniform3f(iResolution,  uniform_provider.getiResolution().x, uniform_provider.getiResolution().y, uniform_provider.getiResolution().z);

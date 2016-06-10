@@ -407,5 +407,5 @@ public class Main  implements IValueSubmittedListener{
 // 9. Visualisierungs Fenster von ControllerFenster abkoppeln
 // 10. Cache Ebene zw. uniformprovider und shadertoy einbauen 
 // 11. iChannelResolution in den Shader übertragen glUniform4v existiert aber leider nicht. wie dann??
-
+// 12. iSampleRate  nicht mit beliebigen Wert initialisieren
 

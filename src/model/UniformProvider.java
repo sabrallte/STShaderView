@@ -40,6 +40,8 @@ public class UniformProvider {
 	public BaseValueGenerator iDateZ;
 	public BaseValueGenerator iDateW;
 	
+	public BaseValueGenerator iSampleRate;
+	
 	public BaseValueGenerator iFrame;
 	
 	
@@ -71,6 +73,8 @@ public class UniformProvider {
 		iDateY = new ConstGenerator(LocalDateTime.now().getMonthValue());
 		iDateZ = new ConstGenerator(LocalDateTime.now().getMinute());
 		iDateW = new ConstGenerator(LocalDateTime.now().getSecond());
+		
+		iSampleRate = new ConstGenerator(44000);
 		
 	}
 	
@@ -221,6 +225,14 @@ public class UniformProvider {
 		return (int) this.iDateW.getValue(x);
 	}
 	
+	// iSampleRate
+	public void setiSampleRate(BaseValueGenerator iSampleRate){
+		if(iSampleRate!= null) {this.iSampleRate = iSampleRate;System.out.println("set iSampleRate:" + iSampleRate);}
+	}
+	
+	public double getiSampleRate(){
+		return  this.iSampleRate.getValue(x);
+	}
 	
 	
     // helpers

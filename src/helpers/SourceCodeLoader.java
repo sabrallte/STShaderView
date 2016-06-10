@@ -203,7 +203,7 @@ public class SourceCodeLoader {
 		String id ="";
 		String source_code;
 		String shader_code;
-		String save_to_path = "res/shader/";
+		String save_to_path = "res/shader/fragment/";
 		
 		
 		if (!is_ID) {
