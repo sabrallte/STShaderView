@@ -384,9 +384,10 @@ public class Main  implements IValueSubmittedListener{
 //	}
 // 6. Performance optimieren (Uniforms nur wenn notwendig erfassen und weiterreichen, etc)
 // 7. Mehr Informationen zu den Shadern berreitstellen (mgl. Inputs, shader selber bennenen)
-// MousePos nur abfragen wenn sie auch im Canvas ist
+//    MousePos nur abfragen wenn sie auch im Canvas ist
 // 8. refreshWebcamPicture nur wenn ein Shader aktiv der auch die Webcam nutzt
-// 9 Visualisierungs Fenster von ControllerFenster abkoppeln
+// 9. Visualisierungs Fenster von ControllerFenster abkoppeln
+// 10. Cache Ebene zw. uniformprovider und shadertoy einbauen 
 
 
 

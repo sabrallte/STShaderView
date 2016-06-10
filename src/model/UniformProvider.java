@@ -6,6 +6,8 @@ import generators.BaseValueGenerator;
 
 public class UniformProvider {
 	
+	// der UnifromProvider muss immer valide werte liefern!
+	
 	int x = 0;
 	
 	BaseValueGenerator iResolutionX;

@@ -21,11 +21,15 @@ import org.lwjgl.input.Mouse;
 
 import com.sun.javafx.geom.Vec3d;
 
+import model.UniformProvider;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;;
 
 public class shadertoy  extends BaseStrategy{
+	
+	
 	
 	
 	//GUI
@@ -75,7 +79,17 @@ public class shadertoy  extends BaseStrategy{
         glUniform1f(iSampleRate, randomno.nextFloat() * 44100);
 
         //vec3
-        glUniform3f(iResolution, (float) viewport_width, (float) viewport_height, (float)1);
+        
+        if (uniform_provider != null) {
+        	System.out.println("uniform");
+        	glUniform3f(iResolution,  uniform_provider.getiResolution().x, uniform_provider.getiResolution().y, uniform_provider.getiResolution().z);
+        	
+        }else {
+        	glUniform3f(iResolution, (float) viewport_width, (float) viewport_height, (float)1);
+        }
+        
+        
+        
         //glUniform3f(iChannelResolution, 100, 100, 100); // auflösung von jedem der 4 Kanäle
         
         

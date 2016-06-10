@@ -1,9 +1,11 @@
 package ui;
 
+import helpers.SourceCodeLoader;
 import interfaces.ITabbedPanel;
 import model.FComboBoxModel;
 import model.IComboBoxModel;
 import model.TextureComboBoxModel;
+import model.UniformProvider;
 import strategys.shadertoy;
 
 /*
@@ -17,6 +19,12 @@ import strategys.shadertoy;
  * @author sabrallte
  */
 public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel {
+	
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	UniformProvider uniform_provider;
+	shadertoy shader;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	
 
     /**
      * Creates new form NodeEditorPanel
@@ -478,6 +486,36 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                     .addComponent(jb_apply))
                 .addContainerGap())
         );
+        
+      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        jb_apply.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				System.out.println("Apply pressed!");
+				
+				// Selections in UniformProvider setzen
+				
+				
+				//FComboBox - iResolution
+				
+				uniform_provider.setiResolutionX(((FComboBoxModel)cb_iResolution_x.getModel()).getGenerator());
+				uniform_provider.setiResolutionY(((FComboBoxModel)cb_iResolution_y.getModel()).getGenerator());
+				uniform_provider.setiResolutionZ(((FComboBoxModel)cb_iResolution_z.getModel()).getGenerator());
+				shader.setUniformProvider(uniform_provider);
+				
+				
+				
+				
+				//this.uniform_provider   in shader setzen!
+			}
+		});
+        
+        jb_reset.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				System.out.println("Rest pressed!");
+			}
+		});
+      //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        
     }// </editor-fold>                        
 
 
@@ -553,16 +591,22 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
     private javax.swing.JLabel label_type_iResolution;
     private javax.swing.JLabel label_type_iSampleRate;
     private javax.swing.JLabel labell_type_iTimeDelta;
-    // End of variables declaration                   
+    // End of variables declaration               
+    
+    
+    
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	@Override
 	public void onTabSelected() {
-		// TODO Auto-generated method stub
+		this.uniform_provider = new UniformProvider();
 		
 	}
 
 	@Override
 	public void setActiveShader(shadertoy shader) {
-		// TODO Auto-generated method stub
+		this.shader = shader;
 		
 	}
+	
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }

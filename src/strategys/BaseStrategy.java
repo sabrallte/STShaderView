@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 
 import org.lwjgl.Sys;
 
+import model.UniformProvider;
+
 import java.util.Date;
 public class BaseStrategy {
 	
@@ -18,6 +20,7 @@ public class BaseStrategy {
 	int viewport_height = 0;
 	long start_time = (Sys.getTime()) / Sys.getTimerResolution();
 	int frame = 0; 
+	UniformProvider uniform_provider = null;
 	
 	//System Zeit in mms
 	
@@ -55,6 +58,9 @@ public class BaseStrategy {
     
     public void set_viewport_height(int height) {
     	viewport_height = height;
+    }
+    public void setUniformProvider(UniformProvider uniform_provider) {
+    	this.uniform_provider = uniform_provider;
     }
 
 
