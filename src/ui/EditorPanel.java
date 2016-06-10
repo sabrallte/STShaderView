@@ -1,74 +1,43 @@
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import helpers.IO;
-import helpers.SourceCodeLoader;
 import interfaces.ITabbedPanel;
-import interfaces.IValueSubmittedListener;
 import strategys.shadertoy;
-import javax.swing.JEditorPane;
 
-public class EditorPanel extends JPanel  implements ITabbedPanel{
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author sabrallte
+ */
+public class EditorPanel extends javax.swing.JPanel implements ITabbedPanel{
 	
-	
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	RSyntaxTextArea textArea;
+	RTextScrollPane sp;
 	shadertoy shader;
-	JEditorPane editor;
+	String unchanged_shader;
 	
-	
-	public EditorPanel() {
-		
-		this.setLayout(new BorderLayout());
-		JButton button_activate = new JButton("Activate");
-		JButton button_delete = new JButton("Delete");
-		JButton button_reload = new JButton("Reload");;
-		editor = new JEditorPane();
-		editor.setSize(10, Integer.MAX_VALUE);
-		//this.setSize(100, 100);
-
-		button_reload.addActionListener(new java.awt.event.ActionListener() {
-            // Beim Drücken des Menüpunktes wird actionPerformed aufgerufen
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-            	editor.setText(readShaderCode());
-        		
-            }
-        });
-		
-		this.add(new JScrollPane(editor));
-		this.setMaximumSize(new Dimension(-1, 20));
-//		this.add(new JScrollPane(list));
-//		this.add(button_activate);
-		//this.add(button_reload);
-//		this.add(button_delete);
-
-	}
 	
 	@Override
 	public void onTabSelected() {
-		editor.setText(readShaderCode());
+		textArea.setText(readShaderCode());
 	}
 	
 	public String readShaderCode() {
 		if(shader == null) {return "ERROR: Kein aktiver Shader gesetzt!";}
-		
 		String path = shader.getFragmentShaderLocation();
 		return IO.readFile(path);
 	}
@@ -79,6 +48,204 @@ public class EditorPanel extends JPanel  implements ITabbedPanel{
 			this.shader = (shadertoy) shader;
 	}
 	
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	
+
+    /**
+     * Creates new form EditorPanel
+     */
+    public EditorPanel() {
+    	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		textArea = new RSyntaxTextArea(20, 60);
+		textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
+		textArea.setCodeFoldingEnabled(true);
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		
+        initComponents();
+        
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+      		jb_compile.addActionListener(new java.awt.event.ActionListener() {
+      			// Beim Drücken des Menüpunktes wird actionPerformed aufgerufen
+      			public void actionPerformed(java.awt.event.ActionEvent e) {
+      				System.out.println("Compile pressed");
+      				shader.setFragmentShader(textArea.getText());
+      			}
+      		});
+      		
+      		jb_save.addActionListener(new java.awt.event.ActionListener() {
+      			// Beim Drücken des Menüpunktes wird actionPerformed aufgerufen
+      			public void actionPerformed(java.awt.event.ActionEvent e) {
+      				System.out.println("jb_save pressed");
+      				IO.saveShaderToFile(textArea.getText(), shader.getFragmentShaderLocation());
+      			}
+      		});
+      		
+      		jb_undo_all_changes.addActionListener(new java.awt.event.ActionListener() {
+      			// Beim Drücken des Menüpunktes wird actionPerformed aufgerufen
+      			public void actionPerformed(java.awt.event.ActionEvent e) {
+      				textArea.setText(readShaderCode());
+      			}
+      		});
+      	
+      		jb_find.addActionListener(new java.awt.event.ActionListener() {
+      			// Beim Drücken des Menüpunktes wird actionPerformed aufgerufen
+      			public void actionPerformed(java.awt.event.ActionEvent e) {
+      				System.out.println("jb_find pressed");
+      			}
+      		});
+      		
+      		jb_mark_all.addActionListener(new java.awt.event.ActionListener() {
+      			// Beim Drücken des Menüpunktes wird actionPerformed aufgerufen
+      			public void actionPerformed(java.awt.event.ActionEvent e) {
+      				System.out.println("jb_mark_all pressed");
+      			}
+      		});
+      		
+      		jb_replace_all.addActionListener(new java.awt.event.ActionListener() {
+      			// Beim Drücken des Menüpunktes wird actionPerformed aufgerufen
+      			public void actionPerformed(java.awt.event.ActionEvent e) {
+      				System.out.println("jb_replace_all pressed");
+      			}
+      		});
+      		
+      		jcb_compile_instantly.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    System.out.println(e.getStateChange() == ItemEvent.SELECTED
+                        ? "SELECTED" : "DESELECTED");
+                }}
+
+				);
+      		
+   
+      		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+    	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    	js_scrollpane = new RTextScrollPane(textArea);
+    	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        jb_undo_all_changes = new javax.swing.JButton();
+        jb_save = new javax.swing.JButton();
+        jcb_compile_instantly = new javax.swing.JCheckBox();
+        jb_compile = new javax.swing.JButton();
+        jl_find = new javax.swing.JLabel();
+        jtf_find_value = new javax.swing.JTextField();
+        jl_replace_with = new javax.swing.JLabel();
+        jtf_replace_with_value = new javax.swing.JTextField();
+        jb_find = new javax.swing.JButton();
+        jb_replace_all = new javax.swing.JButton();
+        jb_mark_all = new javax.swing.JButton();
+
+        jb_undo_all_changes.setText("Undo all changes");
+
+        jb_save.setText("Save");
+
+        jcb_compile_instantly.setText("Compile instantly");
+
+        jb_compile.setText("Compile");
+
+        jl_find.setText("Find:");
+
+        jl_replace_with.setText("Replace with:");
+
+        jb_find.setText("Find");
+        jb_find.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_findActionPerformed(evt);
+            }
+        });
+
+        jb_replace_all.setText("Replace all");
+
+        jb_mark_all.setText("Mark all");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(js_scrollpane)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jcb_compile_instantly)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addComponent(jb_compile))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jl_replace_with)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtf_replace_with_value))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jl_find)
+                                .addGap(44, 44, 44)
+                                .addComponent(jtf_find_value)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jb_save)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jb_undo_all_changes))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jb_find, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jb_replace_all, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jb_mark_all)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(js_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jl_find)
+                    .addComponent(jtf_find_value, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jb_find)
+                    .addComponent(jb_mark_all))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtf_replace_with_value, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jl_replace_with)
+                    .addComponent(jb_replace_all))
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jb_undo_all_changes)
+                    .addComponent(jb_save)
+                    .addComponent(jcb_compile_instantly)
+                    .addComponent(jb_compile))
+                .addGap(10, 10, 10))
+        );
+    }// </editor-fold>                        
+
+    private void jb_findActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        // TODO add your handling code here:
+    }                                       
 
 
+    // Variables declaration - do not modify                     
+    private javax.swing.JTextField jtf_find_value;
+    private javax.swing.JTextField jtf_replace_with_value;
+    private javax.swing.JButton jb_compile;
+    private javax.swing.JButton jb_find;
+    private javax.swing.JButton jb_mark_all;
+    private javax.swing.JButton jb_replace_all;
+    private javax.swing.JButton jb_save;
+    private javax.swing.JButton jb_undo_all_changes;
+    private javax.swing.JCheckBox jcb_compile_instantly;
+    private javax.swing.JLabel jl_find;
+    private javax.swing.JLabel jl_replace_with;
+    private javax.swing.JScrollPane js_scrollpane;
+    // End of variables declaration                   
 }

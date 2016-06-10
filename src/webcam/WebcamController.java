@@ -11,11 +11,29 @@ import com.github.sarxos.webcam.Webcam;
 public class WebcamController {
 	Webcam webcam;
 	boolean running = true;
-	public WebcamController() {
-		// get default webcam and open it
-		webcam = Webcam.getDefault();
-		webcam.open();
-	}
+	
+	
+	  // Eine (versteckte) Klassenvariable vom Typ der eigene Klasse
+	  private static WebcamController instance;
+	  // Verhindere die Erzeugung des Objektes über andere Methoden
+	  private WebcamController () {
+			// get default webcam and open it
+		  System.out.println("Start Webcam");
+			webcam = Webcam.getDefault();
+			webcam.open();
+	  }
+	  // Eine Zugriffsmethode auf Klassenebene, welches dir '''einmal''' ein konkretes 
+	  // Objekt erzeugt und dieses zurückliefert.
+	  // Durch 'synchronized' wird sichergestellt dass diese Methode nur von einem Thread 
+	  // zu einer Zeit durchlaufen wird. Der nächste Thread erhält immer eine komplett 
+	  // initialisierte Instanz.
+	  public static synchronized WebcamController getInstance () {
+	    if (WebcamController.instance == null) {
+	    	WebcamController.instance = new WebcamController();
+	    }
+	    return WebcamController.instance;
+	  }
+	
 
 	
 	public boolean isReady() {
@@ -53,7 +71,7 @@ public class WebcamController {
 	}
 	
 	public static void main(String[] args) {
-		WebcamController wc = new WebcamController();
+		WebcamController wc = WebcamController.getInstance();
 		BufferedImage image  = wc.takePicture();
 	    wc.saveBufferedImageToFile(image, "test.png");
 

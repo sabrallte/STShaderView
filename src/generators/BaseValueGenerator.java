@@ -16,8 +16,10 @@ public class BaseValueGenerator {
 	}
 	
 	public double getValue(double x) {
-		//von laufvariable x abhängige Werte
-		throw new NotImplementedException();
+		// von laufvariable x abhängige Werte
+		// da x durch shadertoy gesetzt wird, gibt der 
+		// BaseValueGenerator immer den aktuellen Frame zurück
+		return x;
 	}
 	
 	public double getValue() {

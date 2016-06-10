@@ -66,7 +66,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
         cb_iMouse_x = new javax.swing.JComboBox<>();
         cb_iChannel0 = new javax.swing.JComboBox<>();
         cb_iChannel1 = new javax.swing.JComboBox<>();
-        jb_iChannel2 = new javax.swing.JComboBox<>();
+        cb_iChannel2 = new javax.swing.JComboBox<>();
         cb_iChannel3 = new javax.swing.JComboBox<>();
         cb_iDate_x = new javax.swing.JComboBox<>();
         cb_SampleRate_x = new javax.swing.JComboBox<>();
@@ -139,7 +139,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
 
         cb_iTimeDelta.setModel(new FComboBoxModel());
 
-        cb_iFrame_x.setModel(new IComboBoxModel());
+        cb_iFrame_x.setModel(new FComboBoxModel());
 
         cb_iChannelTime_w.setModel(new FComboBoxModel());
 
@@ -163,11 +163,11 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
 
         cb_iChannel1.setModel(new TextureComboBoxModel());
 
-        jb_iChannel2.setModel(new TextureComboBoxModel());
+        cb_iChannel2.setModel(new TextureComboBoxModel());
 
         cb_iChannel3.setModel(new TextureComboBoxModel());
 
-        cb_iDate_x.setModel(new IComboBoxModel());
+        cb_iDate_x.setModel(new FComboBoxModel());
 
         cb_SampleRate_x.setModel(new FComboBoxModel());
 
@@ -218,11 +218,11 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
 
         cb_iChannelTime_z.setModel(new FComboBoxModel());
 
-        cb_iDate_y.setModel(new IComboBoxModel());
+        cb_iDate_y.setModel(new FComboBoxModel());
 
-        cb_iDate_z.setModel(new IComboBoxModel());
+        cb_iDate_z.setModel(new FComboBoxModel());
 
-        cb_iDate_w.setModel(new IComboBoxModel());
+        cb_iDate_w.setModel(new FComboBoxModel());
 
         cb_iChannelResolution_y.setModel(new FComboBoxModel());
 
@@ -292,7 +292,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                                 .addComponent(jb_reset))
                             .addComponent(jl_source, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cb_iChannel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jb_iChannel2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cb_iChannel2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cb_iChannel3, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cb_iChannel0, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cb_SampleRate_x, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -449,7 +449,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iChannel2)
-                    .addComponent(jb_iChannel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cb_iChannel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(label_type_iChannel2)
                     .addComponent(jb_iChannel2_reset))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -494,11 +494,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
 				System.out.println("Apply pressed!");
 				
 				// Selections in UniformProvider setzen
-				
-				
 				//FComboBox - iResolution
-				
-				
 				uniform_provider = shader.getUniformProvider();
 				
 				// iResolution
@@ -512,18 +508,43 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
 				uniform_provider.setiMouseZ(((BoolComboBoxModel)cb_iMouse_z.getModel()).getGenerator());
 				uniform_provider.setiMouseW(((BoolComboBoxModel)cb_iMouse_w.getModel()).getGenerator());
 				
+				// iChannel0
+				uniform_provider.setiChannel0(((TextureComboBoxModel) cb_iChannel0.getModel()).getGenerator());
+				
+				// iChannel1
+				uniform_provider.setiChannel1(((TextureComboBoxModel) cb_iChannel1.getModel()).getGenerator());
+				
+				// iChannel2
+				uniform_provider.setiChannel2(((TextureComboBoxModel) cb_iChannel2.getModel()).getGenerator());
+				
+				// iChannel3
+				uniform_provider.setiChannel3(((TextureComboBoxModel) cb_iChannel3.getModel()).getGenerator());
+				
+				// iFrame
+				uniform_provider.setiFrame(((FComboBoxModel)cb_iFrame_x.getModel()).getGenerator());
+				
+				// iDateX
+				uniform_provider.setiDateX(((FComboBoxModel)cb_iDate_x.getModel()).getGenerator());
+				
+				// iDateY
+				uniform_provider.setiDateY(((FComboBoxModel)cb_iDate_y.getModel()).getGenerator());
+				
+				// iDateZ
+				uniform_provider.setiDateZ(((FComboBoxModel)cb_iDate_z.getModel()).getGenerator());
+				
+				// iDateW
+				uniform_provider.setiDateW(((FComboBoxModel)cb_iDate_w.getModel()).getGenerator());
+				
+				
+				// iChannelResolution - TODO für die anderen 3 Kanäle fehlen noch die ComboBoxen
+				//uniform_provider.setiChannelResolution0X((((FComboBoxModel)cb_iChannelResolution_x.getModel()).getGenerator()));
+				
 				shader.setUniformProvider(uniform_provider);
-				
-				
-				
-				
-				//this.uniform_provider   in shader setzen!
 			}
 		});
         
         jb_reset.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				System.out.println("Rest pressed!");
 				shader.initUniformProvider();
 			}
 		});
@@ -562,7 +583,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
     private javax.swing.JButton jb_apply;
     private javax.swing.JButton jb_iChannel0_reset;
     private javax.swing.JButton jb_iChannel1_reset;
-    private javax.swing.JComboBox<String> jb_iChannel2;
+    private javax.swing.JComboBox<String> cb_iChannel2;
     private javax.swing.JButton jb_iChannel2_reset;
     private javax.swing.JButton jb_iChannel3_reset;
     private javax.swing.JButton jb_iChannelResolution_reset;

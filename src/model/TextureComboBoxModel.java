@@ -1,19 +1,24 @@
 package model;
 
 import javax.swing.ComboBoxModel;
+import javax.swing.JFileChooser;
 import javax.swing.event.ListDataListener;
 
 import generators.BaseValueGenerator;
 import generators.BoolGenerator;
 import generators.MouseWGenerator;
 import generators.MouseZGenerator;
+import generators.PictureGenerator;
+import generators.WebcamGenerator;
+import helpers.ImageFilter;
+import interfaces.ITextureGenerator;
 
 public class TextureComboBoxModel implements ComboBoxModel<String> {
 
 	
-	String [] model = {"True", "False", "Left Mouse", "Right Mouse"};
+	String [] model = {"Webcam", "Video", "Picture"};
 	Object selection;
-	BaseValueGenerator generator = null;
+	ITextureGenerator generator = null;
 	
 	@Override
 	public Object getSelectedItem() {
@@ -21,7 +26,7 @@ public class TextureComboBoxModel implements ComboBoxModel<String> {
 		return selection;
 	}
 	
-	public  BaseValueGenerator getGenerator() {
+	public  ITextureGenerator getGenerator() {
 		return this.generator;
 		}
 	
@@ -31,22 +36,23 @@ public class TextureComboBoxModel implements ComboBoxModel<String> {
 		//-> Dialog anzeigen
 		
 		switch(anItem.toString()) {
-			case "True":{
-				this.generator = new BoolGenerator(1);
-				System.out.println("BoolComboBoxModel: TRUE");break;
+			case "Webcam":{
+				this.generator = new WebcamGenerator();
+				break;
 			}
-			case "False":{
-				this.generator = new BoolGenerator(0);
-				System.out.println("BoolComboBoxModel: FALSE");break;
+			case "Video":{
+				break;
 			}
-			case "Left Mouse":{
-				this.generator = new MouseZGenerator();
-				System.out.println("BoolComboBoxModel: Left Mouse");break;
+			case "Picture":{
+				final JFileChooser fc = new JFileChooser();
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				fc.addChoosableFileFilter(new ImageFilter());
+				if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					this.generator = new PictureGenerator(fc.getSelectedFile().getAbsolutePath());
+				}
+				break;
 			}
-			case "Right Mouse":{
-				this.generator = new MouseWGenerator();
-				System.out.println("BoolComboBoxModel: Right Mouse");break;
-			}
+			
 		}
 		selection=anItem;
 		

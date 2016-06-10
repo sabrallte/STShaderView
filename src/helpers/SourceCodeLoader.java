@@ -16,6 +16,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
+import helpers.IO;
 
 public class SourceCodeLoader {
 	String api_key = "Nd8Kw8";
@@ -189,26 +190,7 @@ public class SourceCodeLoader {
 		return shader_source;
 	}
 	
-	public String saveShaderToFile(String shader, String path) {
-		
-		String[] test = shader.split("\n");
-		try(  PrintWriter out = new PrintWriter(path)  ){
-			
-			for (String obj: test){
-				out.println( obj );
-			}
-			
-		    
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		System.out.println("Saved new Shader to: " + path);
-		
-		return path;
-		
-	}
+
 	
 	public String load(String web_url, boolean is_ID) {
 		
@@ -244,7 +226,7 @@ public class SourceCodeLoader {
 		shader_code =  convertShaderToyToGLSL(shader_code);
 		
 		Path p1 = Paths.get(save_to_path+ id+".fs");
-		String path = saveShaderToFile(shader_code, p1.toAbsolutePath().toString());
+		String path = IO.saveShaderToFile(shader_code, p1.toAbsolutePath().toString());
 		
 		return path;
 	}

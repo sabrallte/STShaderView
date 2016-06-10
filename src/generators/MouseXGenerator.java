@@ -6,6 +6,15 @@ public class MouseXGenerator extends BaseValueGenerator{
 
 	@Override
 	public double getValue(double x) {
-		return  MouseInfo.getPointerInfo().getLocation().getX();
+		
+		try {
+			return  MouseInfo.getPointerInfo().getLocation().getX();
+		}
+		catch(NullPointerException e) {
+			System.out.println("MouseXGenerator: NullPointerException");
+		}
+		return 0;
+		
+		
 	}
 }

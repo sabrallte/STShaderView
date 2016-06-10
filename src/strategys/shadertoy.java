@@ -16,11 +16,20 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL21;
 
 import com.sun.javafx.geom.Vec3d;
 
+import generators.BaseValueGenerator;
 import model.UniformProvider;
 
 import java.util.Calendar;
@@ -35,10 +44,26 @@ public class shadertoy  extends BaseStrategy{
 	//GUI
     JSlider sliderAmbient = new JSlider();
     JLabel labelDiffuseWeight = new JLabel("diffuseWeight");
+    String vertex_shader = null;
+    String fragment_shader = null;
+    public boolean need_fragment_shader_refresh = false;
+	
     
     
-    //GUI - Parameter
-    float valOftextSliderMultiplicator = 0;
+    public String getFragmentShader() {
+		return fragment_shader;
+	}
+
+
+	public void setFragmentShader(String fragment_shader) {
+		this.fragment_shader = fragment_shader;
+		this.need_fragment_shader_refresh = true;
+	}
+	
+	public void fragmentShaderRefreshDone() {
+		this.need_fragment_shader_refresh = false;
+	}
+	
 	
 	public shadertoy() {
 		init_options_panel();
@@ -81,11 +106,25 @@ public class shadertoy  extends BaseStrategy{
         //vec3
     	glUniform3f(iResolution,  uniform_provider.getiResolution().x, uniform_provider.getiResolution().y, uniform_provider.getiResolution().z);
         	
-        //glUniform3f(iChannelResolution, 100, 100, 100); // auflösung von jedem der 4 Kanäle
-        
-        
-        //vec4
-        
+        // Auflösung von jedem der 4 Kanäle
+    	
+/*    	java.nio.FloatBuffer iChannelResolutionXX_buffer = BufferUtils.createFloatBuffer(12);; 
+    	iChannelResolutionXX_buffer.reset();
+    	
+    	iChannelResolutionXX_buffer.put(uniform_provider.getiChannelResolution0X().x);
+    	iChannelResolutionXX_buffer.put(uniform_provider.getiChannelResolution0X().y);
+    	iChannelResolutionXX_buffer.put(uniform_provider.getiChannelResolution0X().z);
+    	
+    	iChannelResolutionXX_buffer.put(uniform_provider.getiChannelResolution0X().x);
+    	iChannelResolutionXX_buffer.put(uniform_provider.getiChannelResolution0X().y);
+    	iChannelResolutionXX_buffer.put(uniform_provider.getiChannelResolution0X().z);
+    	
+    	iChannelResolutionXX_buffer.put(uniform_provider.getiChannelResolution0X().x);
+    	iChannelResolutionXX_buffer.put(uniform_provider.getiChannelResolution0X().y);
+    	iChannelResolutionXX_buffer.put(uniform_provider.getiChannelResolution0X().z);
+    	GL21.glUniformMatrix4x3(iChannelResolution, false, iChannelResolutionXX_buffer);*/
+    	
+    	//vec4
         try {
         	glUniform4f(iMouse, uniform_provider.getiMouse().x,uniform_provider.getiMouse().y,  uniform_provider.getiMouse().z, uniform_provider.getiMouse().w);
         	}
@@ -94,10 +133,10 @@ public class shadertoy  extends BaseStrategy{
         	glUniform4f(iMouse, 0,0,0,0);
         }
         
-        glUniform4i(iDate, LocalDateTime.now().getYear(),  LocalDateTime.now().getMonthValue(),LocalDateTime.now().getMinute(), LocalDateTime.now().getSecond()); //(year, month, day, time in seconds)
+        glUniform4i(iDate, uniform_provider.getiDateX(), uniform_provider.getiDateY(), uniform_provider.getiDateZ(), uniform_provider.getiDateW()); //(year, month, day, time in seconds)
         
         //int
-        glUniform1i(iFrame, frame);
+        glUniform1i(iFrame, uniform_provider.getiFrame());
         
         //iChannel
         glActiveTexture (GL_TEXTURE0 + 0);
@@ -138,8 +177,9 @@ public class shadertoy  extends BaseStrategy{
     }
     
     public void initUniformProvider() {
+    	
     	uniform_provider = new UniformProvider();
-    	uniform_provider.iResolutionX.setValue(viewport_width-100);
+    	uniform_provider.iResolutionX.setValue(viewport_width);
     	uniform_provider.iResolutionY.setValue(viewport_height);
     	uniform_provider.iResolutionZ.setValue(1);
     }

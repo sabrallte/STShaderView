@@ -45,6 +45,7 @@ import org.lwjgl.opengl.GL11;
 
 import initSetups.ShaderSetup;
 import interfaces.ITabbedPanel;
+import interfaces.ITextureGenerator;
 import interfaces.IValueSubmittedListener;
 import strategys.BaseStrategy;
 import strategys.shadertoy;
@@ -68,7 +69,7 @@ public class Main  implements IValueSubmittedListener{
     private int texture;
     public shadertoy active_shader = new shadertoy();
     public Canvas webgl_container;
-    public boolean reload_shader_requested = false;
+    public boolean reload_complete_shader__from_file_requested = false;
     public boolean running = true;
     
     // GUI
@@ -79,8 +80,6 @@ public class Main  implements IValueSubmittedListener{
     //GUI - Parameter
     float valOftextSliderMultiplicator = 0;
     
-    //Webcam
-    WebcamController webcam;
     
     //Monitoring
     long lastFPS = 0;
@@ -90,48 +89,62 @@ public class Main  implements IValueSubmittedListener{
     long lastFP10ms = 0;
     
     public Main() {
-    	//webcam = new WebcamController();
+    	
     }
 
     public void onSubmitted(String value) {
         System.out.println("Change Shader to: " + value);
         active_shader.setFragmentShaderLocation(value);
-        reload_shader_requested = true;
+        reload_complete_shader__from_file_requested = true;
     }
     
     private void setUpShader()
     {
+    	// Liest die Shader aus der in active_shader angegebenen Datei und lädt sie ein.
+    	
     	glDeleteProgram(shaderProgram);
     	if (active_shader.getVertexShaderLocation()== null || active_shader.getFragmentShaderLocation() == null){
     		shaderProgram = 0;
     		return;
     	}
     	
-        shaderProgram = ShaderSetup.loadShaderSources(active_shader.getVertexShaderLocation(),active_shader.getFragmentShaderLocation());
+        shaderProgram = ShaderSetup.readAndloadShadersFromFile(active_shader.getVertexShaderLocation(),active_shader.getFragmentShaderLocation());
         
         // Shader ist erst nach dem laden verfügbar
         active_shader.set_shader_program(shaderProgram);
     }
+    
+    
+    private void refreshFragmentShader() {
+    	glDeleteProgram(shaderProgram);
+    	shaderProgram = ShaderSetup.ReadAndloadFragmentShaderFromString(active_shader.getFragmentShader());
+        // Shader ist erst nach dem laden verfügbar
+        active_shader.set_shader_program(shaderProgram);
+    }
+    
 
     private void setUpTextures()
     {
     	
-    	if (webcam!=null && webcam.isReady()) {
-    	       texture = loadTex.loadBufferedImage(webcam.takePicture(), 1);
-    	       //texture = loadTex.loadImageSource("res/textures/1.png");
-    	       texture = loadTex.loadImageSource("res/textures/2.png");
-    	       texture = loadTex.loadImageSource("res/textures/1.png");
-    	       texture = loadTex.loadImageSource("res/textures/2.png");
-    	}
-
-    }
-    
-    private void refreshWebcamPicture() {
-    	if (webcam!=null && webcam.isReady()) {
- 	       texture = loadTex.loadBufferedImage(webcam.takePicture(), 1);
-    	}
-    	
-    	
+		if (active_shader.getUniformProvider().iChannel0.needsRefresh()) {
+			loadTex.loadBufferedImage(((ITextureGenerator)active_shader.getUniformProvider().getiChannel0()).getBufferedImage(), 1);
+			((ITextureGenerator)active_shader.getUniformProvider().getiChannel0()).setRefreshDone();
+		}
+		
+		if (active_shader.getUniformProvider().iChannel1.needsRefresh()) {
+			loadTex.loadBufferedImage(((ITextureGenerator)active_shader.getUniformProvider().getiChannel1()).getBufferedImage(), 2);
+			((ITextureGenerator)active_shader.getUniformProvider().getiChannel1()).setRefreshDone();
+		}
+		
+		if (active_shader.getUniformProvider().iChannel2.needsRefresh()) {
+			loadTex.loadBufferedImage(((ITextureGenerator)active_shader.getUniformProvider().getiChannel2()).getBufferedImage(), 3);
+			((ITextureGenerator)active_shader.getUniformProvider().getiChannel2()).setRefreshDone();
+		}
+		
+		if (active_shader.getUniformProvider().iChannel3.needsRefresh()) {
+			loadTex.loadBufferedImage(((ITextureGenerator)active_shader.getUniformProvider().getiChannel3()).getBufferedImage(), 4);
+			((ITextureGenerator)active_shader.getUniformProvider().getiChannel3()).setRefreshDone();
+		}
     }
 
     private void setUpLight(double now)
@@ -195,9 +208,6 @@ public class Main  implements IValueSubmittedListener{
         tabpane.addTab("Live Coding",editorPanel);
         tabpane.addTab("Download new Shaders",downloadPanel);
         tabpane.addTab("Node Editor", nodePanel);
-        
-        
-
         
         f_visual.getContentPane().add(webgl_container);
         f_controll.getContentPane().add(tabpane);
@@ -276,8 +286,8 @@ public class Main  implements IValueSubmittedListener{
     public void destroy() {
     	running = false;
     	
-    	if (webcam != null) {
-    		webcam.deactivate();
+    	if (WebcamController.getInstance()!=null && WebcamController.getInstance().isReady()) {
+    		WebcamController.getInstance().deactivate();
     	}
     	
     	try {
@@ -324,11 +334,13 @@ public class Main  implements IValueSubmittedListener{
         	Display.sync(60);
             //Display.setVSyncEnabled(false);
             //Display.sync(60);
-
         	
             //Shader in jedem Frame neuladen, das ermöglicht Live im Shadercode änderungen vorzunehmen
-        	if (reload_shader_requested) {setUpShader();}
-        	refreshWebcamPicture();
+        	if (reload_complete_shader__from_file_requested) {setUpShader();}
+        	if (active_shader.need_fragment_shader_refresh) {refreshFragmentShader();}
+        	
+        	setUpTextures();
+        	
         }
 
         glDeleteProgram(shaderProgram);
@@ -394,6 +406,6 @@ public class Main  implements IValueSubmittedListener{
 // 8. refreshWebcamPicture nur wenn ein Shader aktiv der auch die Webcam nutzt
 // 9. Visualisierungs Fenster von ControllerFenster abkoppeln
 // 10. Cache Ebene zw. uniformprovider und shadertoy einbauen 
-
+// 11. iChannelResolution in den Shader übertragen glUniform4v existiert aber leider nicht. wie dann??
 
 

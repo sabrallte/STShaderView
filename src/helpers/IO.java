@@ -1,8 +1,10 @@
 package helpers;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class IO {
 	
@@ -29,6 +31,29 @@ public class IO {
         }
 		return vertexShaderSource.toString();
 	}
+	
+	
+	public static String saveShaderToFile(String shader, String path) {
+			
+			String[] test = shader.split("\n");
+			try(  PrintWriter out = new PrintWriter(path)  ){
+				
+				for (String obj: test){
+					out.println( obj );
+				}
+				
+			    
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			System.out.println("File to: " + path);
+			
+			return path;
+			
+		}
+	
 	
 
 }

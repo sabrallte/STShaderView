@@ -4,14 +4,16 @@ import javax.swing.ComboBoxModel;
 import javax.swing.event.ListDataListener;
 
 import generators.BaseValueGenerator;
+import generators.ConstGenerator;
 import generators.MouseXGenerator;
 import generators.MouseYGenerator;
+import ui.dialog.ConstantGeneratorDialog;
 import ui.dialog.FIGeneratorDialog;
 
 public class FComboBoxModel implements ComboBoxModel<String> {
 	
 	
-	String [] model = {"Generator", "MouseX", "MouseY",  "iFrame", "iGlobalTime", "iTimeDelta"};
+	String [] model = {"Generator", "MouseX", "MouseY", "Constant",  "iFrame", "iGlobalTime", "iTimeDelta"};
 	Object selection;
 	BaseValueGenerator generator = null;
 	
@@ -20,7 +22,7 @@ public class FComboBoxModel implements ComboBoxModel<String> {
 		//Liefert das Objekt zurück (z.B. einen String), welcher als ausgewählter Eintrag in der JComboBox angezeigt werden soll.
 		return selection;
 	}
-	
+			
 	public  BaseValueGenerator getGenerator() {
 		return this.generator;
 		}
@@ -38,12 +40,19 @@ public class FComboBoxModel implements ComboBoxModel<String> {
 				dlg.setModal(true);
 				dlg.setVisible(true);
 				this.generator = dlg.getValue();
-				if (this.generator==null) {
-					return;
-			}}
-				
+				break;
+			}
+			case "Constant":{
+				ConstantGeneratorDialog dlg = new ConstantGeneratorDialog();
+				dlg.setModal(true);
+				dlg.setVisible(true);
+				this.generator = dlg.getValue();
+				break;
+				}
 			case "MouseX":{this.generator = new MouseXGenerator(); break;}
 			case "MouseY":{this.generator = new MouseYGenerator(); break;}
+			case "iFrame":{this.generator = new BaseValueGenerator(); break;}
+			
 			case "": {return;}
 		
 		}

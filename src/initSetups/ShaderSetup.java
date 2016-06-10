@@ -7,54 +7,79 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class ShaderSetup {
+	
+	private static String fragment_shader = null;
+	private static String vertex_shader = null;
+	
+	public static int ReadAndloadFragmentShaderFromString(String fs) {
+		
+		if(fragment_shader == null) {
+			throw new NullPointerException();
+		}
+		
+		fragment_shader = fs;
+		return loadShaderSources(vertex_shader, fragment_shader );
+	}
+	
+	
+	public static int readAndloadShadersFromFile(String vertexShaderLocation, String fragmentShaderLocation) {
+		
+		 	StringBuilder vertexShaderSource = new StringBuilder();
+	        StringBuilder fragmentShaderSource = new StringBuilder();
+	        BufferedReader vertexShaderFileReader = null;
 
-    public static int loadShaderSources(String vertexShaderLocation, String fragmentShaderLocation)
+	        try {
+	            vertexShaderFileReader = new BufferedReader(new FileReader(vertexShaderLocation));
+	            String line;
+	            while((line = vertexShaderFileReader.readLine()) != null) {
+	                vertexShaderSource.append(line).append('\n');
+	            }
+	        }catch(IOException e) {
+	            e.printStackTrace();
+	            return -1;
+	        }finally {
+	            if(vertexShaderFileReader != null) {
+	                try {
+	                    vertexShaderFileReader.close();
+	                }catch(IOException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
+
+	        BufferedReader fragmentShaderFileReader = null;
+	        try {
+	            fragmentShaderFileReader = new BufferedReader(new FileReader(fragmentShaderLocation));
+	            String line;
+	            while((line = fragmentShaderFileReader.readLine()) != null) {
+	                fragmentShaderSource.append(line).append('\n');
+	            }
+	        }catch(IOException e) {
+	            e.printStackTrace();
+	            return -1;
+	        }finally {
+	            if(fragmentShaderFileReader != null) {
+	                try {
+	                    fragmentShaderFileReader.close();
+	                }catch(IOException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
+	        
+	        fragment_shader = fragmentShaderSource.toString();
+	        vertex_shader = vertexShaderSource.toString();
+	        
+		return loadShaderSources(vertex_shader,fragment_shader);
+	}
+	
+
+    public static int loadShaderSources(String vertexShaderSource, String fragmentShaderSource)
     {
         int shaderProgram = glCreateProgram();
         int vertexShader = glCreateShader(GL_VERTEX_SHADER);
         int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        StringBuilder vertexShaderSource = new StringBuilder();
-        StringBuilder fragmentShaderSource = new StringBuilder();
-        BufferedReader vertexShaderFileReader = null;
-
-        try {
-            vertexShaderFileReader = new BufferedReader(new FileReader(vertexShaderLocation));
-            String line;
-            while((line = vertexShaderFileReader.readLine()) != null) {
-                vertexShaderSource.append(line).append('\n');
-            }
-        }catch(IOException e) {
-            e.printStackTrace();
-            return -1;
-        }finally {
-            if(vertexShaderFileReader != null) {
-                try {
-                    vertexShaderFileReader.close();
-                }catch(IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        BufferedReader fragmentShaderFileReader = null;
-        try {
-            fragmentShaderFileReader = new BufferedReader(new FileReader(fragmentShaderLocation));
-            String line;
-            while((line = fragmentShaderFileReader.readLine()) != null) {
-                fragmentShaderSource.append(line).append('\n');
-            }
-        }catch(IOException e) {
-            e.printStackTrace();
-            return -1;
-        }finally {
-            if(fragmentShaderFileReader != null) {
-                try {
-                    fragmentShaderFileReader.close();
-                }catch(IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+       
 
         glShaderSource(vertexShader, vertexShaderSource);
         glCompileShader(vertexShader);
