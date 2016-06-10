@@ -1,12 +1,15 @@
 package ui;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
+import javax.swing.JOptionPane;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.fife.ui.rtextarea.SearchContext;
+import org.fife.ui.rtextarea.SearchEngine;
 
 import helpers.IO;
 import interfaces.ITabbedPanel;
@@ -91,6 +94,24 @@ public class EditorPanel extends javax.swing.JPanel implements ITabbedPanel{
       			// Beim Drücken des Menüpunktes wird actionPerformed aufgerufen
       			public void actionPerformed(java.awt.event.ActionEvent e) {
       				System.out.println("jb_find pressed");
+      				
+      		      // Create an object defining our search parameters.
+      		      SearchContext context = new SearchContext();
+      		      String text = jtf_find_value.getText();
+      		      if (text.length() == 0) {
+      		         return;
+      		      }
+      		      context.setSearchFor(text);
+      		      //context.setMatchCase(matchCaseCB.isSelected());
+      		      context.setSearchForward(true);
+      		      context.setWholeWord(false);
+
+      		      boolean found = SearchEngine.find(textArea, context).wasFound();
+      		      if (!found) {
+      		    	  System.out.println("Text not found!");
+      		      }
+      				
+      				
       			}
       		});
       		

@@ -1,10 +1,8 @@
 package ui;
 
-import helpers.SourceCodeLoader;
 import interfaces.ITabbedPanel;
 import model.BoolComboBoxModel;
 import model.FComboBoxModel;
-import model.IComboBoxModel;
 import model.TextureComboBoxModel;
 import model.UniformProvider;
 import strategys.shadertoy;
@@ -19,20 +17,96 @@ import strategys.shadertoy;
  *
  * @author sabrallte
  */
-public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel {
-	
+public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel{
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	UniformProvider uniform_provider;
 	shadertoy shader;
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
-
     /**
      * Creates new form NodeEditorPanel
      */
     public NodeEditorPanel() {
         initComponents();
+        
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        jb_apply.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				System.out.println("Apply pressed!");
+				
+				// Selections in UniformProvider setzen
+				//FComboBox - iResolution
+				uniform_provider = shader.getUniformProvider();
+				
+				// iResolution
+				uniform_provider.setiResolutionX(((FComboBoxModel)cb_iResolution_x.getModel()).getGenerator());
+				uniform_provider.setiResolutionY(((FComboBoxModel)cb_iResolution_y.getModel()).getGenerator());
+				uniform_provider.setiResolutionZ(((FComboBoxModel)cb_iResolution_z.getModel()).getGenerator());
+				
+				// iMouse
+				uniform_provider.setiMouseX(((FComboBoxModel)cb_iMouse_x.getModel()).getGenerator());
+				uniform_provider.setiMouseY(((FComboBoxModel)cb_iMouse_y.getModel()).getGenerator());
+				uniform_provider.setiMouseZ(((BoolComboBoxModel)cb_iMouse_z.getModel()).getGenerator());
+				uniform_provider.setiMouseW(((BoolComboBoxModel)cb_iMouse_w.getModel()).getGenerator());
+				
+				// iChannel0
+				uniform_provider.setiChannel0(((TextureComboBoxModel) cb_iChannel0.getModel()).getGenerator());
+				
+				// iChannel1
+				uniform_provider.setiChannel1(((TextureComboBoxModel) cb_iChannel1.getModel()).getGenerator());
+				
+				// iChannel2
+				uniform_provider.setiChannel2(((TextureComboBoxModel) cb_iChannel2.getModel()).getGenerator());
+				
+				// iChannel3
+				uniform_provider.setiChannel3(((TextureComboBoxModel) cb_iChannel3.getModel()).getGenerator());
+				
+				// iFrame
+				uniform_provider.setiFrame(((FComboBoxModel)cb_iFrame_x.getModel()).getGenerator());
+				
+				// iDateX
+				uniform_provider.setiDateX(((FComboBoxModel)cb_iDate_x.getModel()).getGenerator());
+				
+				// iDateY
+				uniform_provider.setiDateY(((FComboBoxModel)cb_iDate_y.getModel()).getGenerator());
+				
+				// iDateZ
+				uniform_provider.setiDateZ(((FComboBoxModel)cb_iDate_z.getModel()).getGenerator());
+				
+				// iDateW
+				uniform_provider.setiDateW(((FComboBoxModel)cb_iDate_w.getModel()).getGenerator());
+				
+				
+				// iChannelResolution - TODO für die anderen 3 Kanäle fehlen noch die ComboBoxen
+				//uniform_provider.setiChannelResolution0X((((FComboBoxModel)cb_iChannelResolution_x.getModel()).getGenerator()));
+				
+				shader.setUniformProvider(uniform_provider);
+			}
+		});
+        
+        jb_reset.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				shader.initUniformProvider();
+			}
+		});
+      //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     }
+    
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	@Override
+	public void onTabSelected() {
+		this.uniform_provider = new UniformProvider();
+		
+	}
+
+	@Override
+	public void setActiveShader(shadertoy shader) {
+		this.shader = shader;
+		
+	}
+	
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,19 +175,6 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
         cb_iMouse_y = new javax.swing.JComboBox<>();
         cb_iMouse_z = new javax.swing.JComboBox<>();
         cb_iMouse_w = new javax.swing.JComboBox<>();
-        jb_iResolution_reset = new javax.swing.JButton();
-        jb_iGlobalTime_reset = new javax.swing.JButton();
-        jb_iTimeDelta_reset = new javax.swing.JButton();
-        jb_iFrame_reset = new javax.swing.JButton();
-        jb_iChannelTime_reset = new javax.swing.JButton();
-        jb_iMouse_reset = new javax.swing.JButton();
-        jb_iChannel0_reset = new javax.swing.JButton();
-        jb_iChannel1_reset = new javax.swing.JButton();
-        jb_iChannel2_reset = new javax.swing.JButton();
-        jb_iChannel3_reset = new javax.swing.JButton();
-        jb_iDate_reset = new javax.swing.JButton();
-        jb_iSampleRate_reset = new javax.swing.JButton();
-        jb_iChannelResolution_reset = new javax.swing.JButton();
 
         jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -168,6 +229,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
         cb_iChannel3.setModel(new TextureComboBoxModel());
 
         cb_iDate_x.setModel(new FComboBoxModel());
+        cb_iDate_x.setMinimumSize(new java.awt.Dimension(69, 20));
 
         cb_SampleRate_x.setModel(new FComboBoxModel());
 
@@ -234,39 +296,13 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
 
         cb_iMouse_w.setModel(new BoolComboBoxModel());
 
-        jb_iResolution_reset.setText("Rest");
-
-        jb_iGlobalTime_reset.setText("Rest");
-
-        jb_iTimeDelta_reset.setText("Rest");
-
-        jb_iFrame_reset.setText("Rest");
-
-        jb_iChannelTime_reset.setText("Rest");
-
-        jb_iMouse_reset.setText("Rest");
-
-        jb_iChannel0_reset.setText("Rest");
-
-        jb_iChannel1_reset.setText("Rest");
-
-        jb_iChannel2_reset.setText("Rest");
-
-        jb_iChannel3_reset.setText("Rest");
-
-        jb_iDate_reset.setText("Rest");
-
-        jb_iSampleRate_reset.setText("Rest");
-
-        jb_iChannelResolution_reset.setText("Rest");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jl_input)
@@ -282,78 +318,63 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                             .addComponent(label_iChannel3)
                             .addComponent(label_iDate)
                             .addComponent(label_iSampleRate))
-                        .addGap(44, 44, 44)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(cb_iTimeDelta, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_iFrame_x, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jb_apply)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jb_reset))
-                            .addComponent(jl_source, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cb_iChannel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_iChannel2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_iChannel3, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_iChannel0, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_SampleRate_x, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cb_iResolution_x, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(cb_iResolution_y, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cb_iResolution_z, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(cb_iGlobalTime_x, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(cb_iDate_x, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(14, 14, 14)
-                                .addComponent(cb_iDate_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cb_iDate_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cb_iDate_w, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(cb_iMouse_x, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cb_iChannelTime_x, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cb_iChannelTime_y, 0, 56, Short.MAX_VALUE)
-                                    .addComponent(cb_iMouse_y, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cb_iMouse_z, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cb_iChannelTime_z, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cb_iMouse_w, 0, 59, Short.MAX_VALUE)
-                                    .addComponent(cb_iChannelTime_w, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .addGap(44, 44, 44))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(label_iChannelResolution)
-                        .addGap(18, 18, 18)
+                        .addComponent(label_iChannelResolution, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(cb_iChannelResolution_x, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(20, 20, 20)
+                        .addComponent(cb_iChannelResolution_y, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(17, 17, 17)
+                        .addComponent(cb_iChannelResolution_z, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cb_iTimeDelta, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_iFrame_x, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jb_apply, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cb_iChannelResolution_y, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jb_reset))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jl_source, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(265, 265, 265))
+                    .addComponent(cb_iChannel1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_iChannel2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_iChannel3, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_iChannel0, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_SampleRate_x, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cb_iResolution_x, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(cb_iChannelResolution_z, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(cb_iResolution_y, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cb_iResolution_z, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cb_iGlobalTime_x, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(cb_iDate_x, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(12, 12, 12)
+                        .addComponent(cb_iDate_y, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cb_iDate_z, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cb_iDate_w, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jb_iResolution_reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jb_iGlobalTime_reset, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jb_iTimeDelta_reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jb_iFrame_reset, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jb_iChannelTime_reset, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jb_iMouse_reset, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jb_iChannel0_reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jb_iChannel1_reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jb_iChannel2_reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jb_iChannel3_reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jb_iDate_reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jb_iSampleRate_reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jb_iChannelResolution_reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cb_iChannelTime_x, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cb_iMouse_x, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cb_iMouse_y, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cb_iChannelTime_y, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cb_iChannelTime_z, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cb_iMouse_z, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cb_iMouse_w, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cb_iChannelTime_w, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(65, 65, 65)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jl_type)
                     .addComponent(label_type_iResolution)
@@ -371,17 +392,6 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                     .addComponent(label_type_iChannelResolution))
                 .addContainerGap())
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_iChannelTime_w, cb_iChannelTime_x, cb_iChannelTime_y, cb_iChannelTime_z});
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] { cb_iMouse_w, cb_iMouse_x, cb_iMouse_y, cb_iMouse_z});
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_iResolution_x, cb_iResolution_y, cb_iResolution_z});
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_iDate_w, cb_iDate_x, cb_iDate_y, cb_iDate_z});
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_iChannelResolution_x, cb_iChannelResolution_y, cb_iChannelResolution_z});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -396,26 +406,22 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                     .addComponent(cb_iResolution_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(label_type_iResolution)
                     .addComponent(cb_iResolution_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_iResolution_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jb_iResolution_reset))
+                    .addComponent(cb_iResolution_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iGlobalTime)
                     .addComponent(cb_iGlobalTime_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label_type_iGlobalTime)
-                    .addComponent(jb_iGlobalTime_reset))
+                    .addComponent(label_type_iGlobalTime))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iTimeDelta)
                     .addComponent(cb_iTimeDelta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labell_type_iTimeDelta)
-                    .addComponent(jb_iTimeDelta_reset))
+                    .addComponent(labell_type_iTimeDelta))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iFrame)
                     .addComponent(cb_iFrame_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label_type_iFrame)
-                    .addComponent(jb_iFrame_reset))
+                    .addComponent(label_type_iFrame))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iChannelTime)
@@ -423,8 +429,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                     .addComponent(label_type_iChannelTime)
                     .addComponent(cb_iChannelTime_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_iChannelTime_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_iChannelTime_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jb_iChannelTime_reset))
+                    .addComponent(cb_iChannelTime_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iMouse)
@@ -432,32 +437,27 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                     .addComponent(label_type_iMouse)
                     .addComponent(cb_iMouse_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_iMouse_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_iMouse_w, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jb_iMouse_reset))
+                    .addComponent(cb_iMouse_w, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iChannel0)
                     .addComponent(cb_iChannel0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label_type_iChannel0)
-                    .addComponent(jb_iChannel0_reset))
+                    .addComponent(label_type_iChannel0))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iChannel1)
                     .addComponent(cb_iChannel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label_type_iChannel1)
-                    .addComponent(jb_iChannel1_reset))
+                    .addComponent(label_type_iChannel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iChannel2)
                     .addComponent(cb_iChannel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label_type_iChannel2)
-                    .addComponent(jb_iChannel2_reset))
+                    .addComponent(label_type_iChannel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iChannel3)
                     .addComponent(cb_iChannel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label_type_iChannel3)
-                    .addComponent(jb_iChannel3_reset))
+                    .addComponent(label_type_iChannel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iDate)
@@ -465,91 +465,25 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                     .addComponent(label_type_iDate)
                     .addComponent(cb_iDate_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_iDate_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_iDate_w, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jb_iDate_reset))
+                    .addComponent(cb_iDate_w, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iSampleRate)
                     .addComponent(cb_SampleRate_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label_type_iSampleRate)
-                    .addComponent(jb_iSampleRate_reset))
+                    .addComponent(label_type_iSampleRate))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iChannelResolution)
                     .addComponent(cb_iChannelResolution_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(label_type_iChannelResolution)
                     .addComponent(cb_iChannelResolution_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_iChannelResolution_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jb_iChannelResolution_reset))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_iChannelResolution_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jb_reset)
                     .addComponent(jb_apply))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        
-      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        jb_apply.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				System.out.println("Apply pressed!");
-				
-				// Selections in UniformProvider setzen
-				//FComboBox - iResolution
-				uniform_provider = shader.getUniformProvider();
-				
-				// iResolution
-				uniform_provider.setiResolutionX(((FComboBoxModel)cb_iResolution_x.getModel()).getGenerator());
-				uniform_provider.setiResolutionY(((FComboBoxModel)cb_iResolution_y.getModel()).getGenerator());
-				uniform_provider.setiResolutionZ(((FComboBoxModel)cb_iResolution_z.getModel()).getGenerator());
-				
-				// iMouse
-				uniform_provider.setiMouseX(((FComboBoxModel)cb_iMouse_x.getModel()).getGenerator());
-				uniform_provider.setiMouseY(((FComboBoxModel)cb_iMouse_y.getModel()).getGenerator());
-				uniform_provider.setiMouseZ(((BoolComboBoxModel)cb_iMouse_z.getModel()).getGenerator());
-				uniform_provider.setiMouseW(((BoolComboBoxModel)cb_iMouse_w.getModel()).getGenerator());
-				
-				// iChannel0
-				uniform_provider.setiChannel0(((TextureComboBoxModel) cb_iChannel0.getModel()).getGenerator());
-				
-				// iChannel1
-				uniform_provider.setiChannel1(((TextureComboBoxModel) cb_iChannel1.getModel()).getGenerator());
-				
-				// iChannel2
-				uniform_provider.setiChannel2(((TextureComboBoxModel) cb_iChannel2.getModel()).getGenerator());
-				
-				// iChannel3
-				uniform_provider.setiChannel3(((TextureComboBoxModel) cb_iChannel3.getModel()).getGenerator());
-				
-				// iFrame
-				uniform_provider.setiFrame(((FComboBoxModel)cb_iFrame_x.getModel()).getGenerator());
-				
-				// iDateX
-				uniform_provider.setiDateX(((FComboBoxModel)cb_iDate_x.getModel()).getGenerator());
-				
-				// iDateY
-				uniform_provider.setiDateY(((FComboBoxModel)cb_iDate_y.getModel()).getGenerator());
-				
-				// iDateZ
-				uniform_provider.setiDateZ(((FComboBoxModel)cb_iDate_z.getModel()).getGenerator());
-				
-				// iDateW
-				uniform_provider.setiDateW(((FComboBoxModel)cb_iDate_w.getModel()).getGenerator());
-				
-				
-				// iChannelResolution - TODO für die anderen 3 Kanäle fehlen noch die ComboBoxen
-				//uniform_provider.setiChannelResolution0X((((FComboBoxModel)cb_iChannelResolution_x.getModel()).getGenerator()));
-				
-				shader.setUniformProvider(uniform_provider);
-			}
-		});
-        
-        jb_reset.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				shader.initUniformProvider();
-			}
-		});
-      //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        
     }// </editor-fold>                        
 
 
@@ -557,6 +491,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
     private javax.swing.JComboBox<String> cb_SampleRate_x;
     private javax.swing.JComboBox<String> cb_iChannel0;
     private javax.swing.JComboBox<String> cb_iChannel1;
+    private javax.swing.JComboBox<String> cb_iChannel2;
     private javax.swing.JComboBox<String> cb_iChannel3;
     private javax.swing.JComboBox<String> cb_iChannelResolution_x;
     private javax.swing.JComboBox<String> cb_iChannelResolution_y;
@@ -581,20 +516,6 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
     private javax.swing.JComboBox<String> cb_iTimeDelta;
     private javax.swing.JComboBox<String> jComboBox5;
     private javax.swing.JButton jb_apply;
-    private javax.swing.JButton jb_iChannel0_reset;
-    private javax.swing.JButton jb_iChannel1_reset;
-    private javax.swing.JComboBox<String> cb_iChannel2;
-    private javax.swing.JButton jb_iChannel2_reset;
-    private javax.swing.JButton jb_iChannel3_reset;
-    private javax.swing.JButton jb_iChannelResolution_reset;
-    private javax.swing.JButton jb_iChannelTime_reset;
-    private javax.swing.JButton jb_iDate_reset;
-    private javax.swing.JButton jb_iFrame_reset;
-    private javax.swing.JButton jb_iGlobalTime_reset;
-    private javax.swing.JButton jb_iMouse_reset;
-    private javax.swing.JButton jb_iResolution_reset;
-    private javax.swing.JButton jb_iSampleRate_reset;
-    private javax.swing.JButton jb_iTimeDelta_reset;
     private javax.swing.JButton jb_reset;
     private javax.swing.JLabel jl_input;
     private javax.swing.JLabel jl_source;
@@ -625,22 +546,5 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
     private javax.swing.JLabel label_type_iResolution;
     private javax.swing.JLabel label_type_iSampleRate;
     private javax.swing.JLabel labell_type_iTimeDelta;
-    // End of variables declaration               
-    
-    
-    
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	@Override
-	public void onTabSelected() {
-		this.uniform_provider = new UniformProvider();
-		
-	}
-
-	@Override
-	public void setActiveShader(shadertoy shader) {
-		this.shader = shader;
-		
-	}
-	
-	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // End of variables declaration                   
 }
