@@ -4,12 +4,14 @@ import javax.swing.ComboBoxModel;
 import javax.swing.event.ListDataListener;
 
 import generators.BaseValueGenerator;
+import generators.MouseXGenerator;
+import generators.MouseYGenerator;
 import ui.dialog.FIGeneratorDialog;
 
 public class FComboBoxModel implements ComboBoxModel<String> {
 	
 	
-	String [] model = {"Standard", "Generator", "Mouse", "iFrame", "iGlobalTime", "iTimeDelta"};
+	String [] model = {"Generator", "MouseX", "MouseY",  "iFrame", "iGlobalTime", "iTimeDelta"};
 	Object selection;
 	BaseValueGenerator generator = null;
 	
@@ -36,13 +38,13 @@ public class FComboBoxModel implements ComboBoxModel<String> {
 				dlg.setModal(true);
 				dlg.setVisible(true);
 				this.generator = dlg.getValue();
-				
 				if (this.generator==null) {
-					selection="Standard";
-				}else {
-					
-				}
-			}
+					return;
+			}}
+				
+			case "MouseX":{this.generator = new MouseXGenerator(); break;}
+			case "MouseY":{this.generator = new MouseYGenerator(); break;}
+			case "": {return;}
 		
 		}
 		selection=anItem;

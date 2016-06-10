@@ -2,6 +2,7 @@ package ui;
 
 import helpers.SourceCodeLoader;
 import interfaces.ITabbedPanel;
+import model.BoolComboBoxModel;
 import model.FComboBoxModel;
 import model.IComboBoxModel;
 import model.TextureComboBoxModel;
@@ -54,7 +55,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
         cb_iGlobalTime_x = new javax.swing.JComboBox<>();
         cb_iTimeDelta = new javax.swing.JComboBox<>();
         cb_iFrame_x = new javax.swing.JComboBox<>();
-        cb_iChannelTime_q = new javax.swing.JComboBox<>();
+        cb_iChannelTime_w = new javax.swing.JComboBox<>();
         label_iMouse = new javax.swing.JLabel();
         label_iChannel0 = new javax.swing.JLabel();
         label_iChannel1 = new javax.swing.JLabel();
@@ -94,12 +95,12 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
         cb_iChannelTime_z = new javax.swing.JComboBox<>();
         cb_iDate_y = new javax.swing.JComboBox<>();
         cb_iDate_z = new javax.swing.JComboBox<>();
-        cb_iDate_q = new javax.swing.JComboBox<>();
+        cb_iDate_w = new javax.swing.JComboBox<>();
         cb_iChannelResolution_y = new javax.swing.JComboBox<>();
         cb_iChannelResolution_z = new javax.swing.JComboBox<>();
         cb_iMouse_y = new javax.swing.JComboBox<>();
         cb_iMouse_z = new javax.swing.JComboBox<>();
-        cb_iMouse_q = new javax.swing.JComboBox<>();
+        cb_iMouse_w = new javax.swing.JComboBox<>();
         jb_iResolution_reset = new javax.swing.JButton();
         jb_iGlobalTime_reset = new javax.swing.JButton();
         jb_iTimeDelta_reset = new javax.swing.JButton();
@@ -140,7 +141,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
 
         cb_iFrame_x.setModel(new IComboBoxModel());
 
-        cb_iChannelTime_q.setModel(new FComboBoxModel());
+        cb_iChannelTime_w.setModel(new FComboBoxModel());
 
         label_iMouse.setText("iMouse");
 
@@ -221,7 +222,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
 
         cb_iDate_z.setModel(new IComboBoxModel());
 
-        cb_iDate_q.setModel(new IComboBoxModel());
+        cb_iDate_w.setModel(new IComboBoxModel());
 
         cb_iChannelResolution_y.setModel(new FComboBoxModel());
 
@@ -229,9 +230,9 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
 
         cb_iMouse_y.setModel(new FComboBoxModel());
 
-        cb_iMouse_z.setModel(new FComboBoxModel());
+        cb_iMouse_z.setModel(new BoolComboBoxModel());
 
-        cb_iMouse_q.setModel(new FComboBoxModel());
+        cb_iMouse_w.setModel(new BoolComboBoxModel());
 
         jb_iResolution_reset.setText("Rest");
 
@@ -309,7 +310,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(cb_iDate_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cb_iDate_q, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(cb_iDate_w, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(cb_iMouse_x, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -324,8 +325,8 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                                     .addComponent(cb_iChannelTime_z, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cb_iMouse_q, 0, 59, Short.MAX_VALUE)
-                                    .addComponent(cb_iChannelTime_q, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(cb_iMouse_w, 0, 59, Short.MAX_VALUE)
+                                    .addComponent(cb_iChannelTime_w, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(label_iChannelResolution)
                         .addGap(18, 18, 18)
@@ -371,13 +372,13 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_iChannelTime_q, cb_iChannelTime_x, cb_iChannelTime_y, cb_iChannelTime_z});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_iChannelTime_w, cb_iChannelTime_x, cb_iChannelTime_y, cb_iChannelTime_z});
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_iMouse_q, cb_iMouse_x, cb_iMouse_y, cb_iMouse_z});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] { cb_iMouse_w, cb_iMouse_x, cb_iMouse_y, cb_iMouse_z});
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_iResolution_x, cb_iResolution_y, cb_iResolution_z});
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_iDate_q, cb_iDate_x, cb_iDate_y, cb_iDate_z});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_iDate_w, cb_iDate_x, cb_iDate_y, cb_iDate_z});
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_iChannelResolution_x, cb_iChannelResolution_y, cb_iChannelResolution_z});
 
@@ -418,7 +419,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_iChannelTime)
-                    .addComponent(cb_iChannelTime_q, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cb_iChannelTime_w, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(label_type_iChannelTime)
                     .addComponent(cb_iChannelTime_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_iChannelTime_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -431,7 +432,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                     .addComponent(label_type_iMouse)
                     .addComponent(cb_iMouse_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_iMouse_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_iMouse_q, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cb_iMouse_w, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jb_iMouse_reset))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -464,7 +465,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
                     .addComponent(label_type_iDate)
                     .addComponent(cb_iDate_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_iDate_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_iDate_q, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cb_iDate_w, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jb_iDate_reset))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -497,9 +498,20 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
 				
 				//FComboBox - iResolution
 				
+				
+				uniform_provider = shader.getUniformProvider();
+				
+				// iResolution
 				uniform_provider.setiResolutionX(((FComboBoxModel)cb_iResolution_x.getModel()).getGenerator());
 				uniform_provider.setiResolutionY(((FComboBoxModel)cb_iResolution_y.getModel()).getGenerator());
 				uniform_provider.setiResolutionZ(((FComboBoxModel)cb_iResolution_z.getModel()).getGenerator());
+				
+				// iMouse
+				uniform_provider.setiMouseX(((FComboBoxModel)cb_iMouse_x.getModel()).getGenerator());
+				uniform_provider.setiMouseY(((FComboBoxModel)cb_iMouse_y.getModel()).getGenerator());
+				uniform_provider.setiMouseZ(((BoolComboBoxModel)cb_iMouse_z.getModel()).getGenerator());
+				uniform_provider.setiMouseW(((BoolComboBoxModel)cb_iMouse_w.getModel()).getGenerator());
+				
 				shader.setUniformProvider(uniform_provider);
 				
 				
@@ -512,6 +524,7 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
         jb_reset.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				System.out.println("Rest pressed!");
+				shader.initUniformProvider();
 			}
 		});
       //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -527,17 +540,17 @@ public class NodeEditorPanel extends javax.swing.JPanel implements ITabbedPanel 
     private javax.swing.JComboBox<String> cb_iChannelResolution_x;
     private javax.swing.JComboBox<String> cb_iChannelResolution_y;
     private javax.swing.JComboBox<String> cb_iChannelResolution_z;
-    private javax.swing.JComboBox<String> cb_iChannelTime_q;
+    private javax.swing.JComboBox<String> cb_iChannelTime_w;
     private javax.swing.JComboBox<String> cb_iChannelTime_x;
     private javax.swing.JComboBox<String> cb_iChannelTime_y;
     private javax.swing.JComboBox<String> cb_iChannelTime_z;
-    private javax.swing.JComboBox<String> cb_iDate_q;
+    private javax.swing.JComboBox<String> cb_iDate_w;
     private javax.swing.JComboBox<String> cb_iDate_x;
     private javax.swing.JComboBox<String> cb_iDate_y;
     private javax.swing.JComboBox<String> cb_iDate_z;
     private javax.swing.JComboBox<String> cb_iFrame_x;
     private javax.swing.JComboBox<String> cb_iGlobalTime_x;
-    private javax.swing.JComboBox<String> cb_iMouse_q;
+    private javax.swing.JComboBox<String> cb_iMouse_w;
     private javax.swing.JComboBox<String> cb_iMouse_x;
     private javax.swing.JComboBox<String> cb_iMouse_y;
     private javax.swing.JComboBox<String> cb_iMouse_z;

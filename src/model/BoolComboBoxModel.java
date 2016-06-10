@@ -6,10 +6,12 @@ import javax.swing.event.ListDataListener;
 import generators.BaseValueGenerator;
 import generators.BoolGenerator;
 import generators.MouseWGenerator;
+import generators.MouseYGenerator;
 import generators.MouseZGenerator;
+import ui.dialog.FIGeneratorDialog;
 
-public class TextureComboBoxModel implements ComboBoxModel<String> {
-
+public class BoolComboBoxModel implements ComboBoxModel<String> {
+	
 	
 	String [] model = {"True", "False", "Left Mouse", "Right Mouse"};
 	Object selection;

@@ -10,6 +10,6 @@ public class SinusGenerator extends BaseValueGenerator{
 	
 	@Override
 	public double getValue(double x) {
-		return Math.sin(x) * amplitude;
+		return ((Math.sin(x)+1)/100) * amplitude;
 	}
 }

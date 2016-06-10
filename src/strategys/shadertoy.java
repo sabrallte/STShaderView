@@ -50,12 +50,12 @@ public class shadertoy  extends BaseStrategy{
     public void pass_uniforms(){
     	frame++;
     	
-    	
-    	
     	//uniform float diffuseWeight;
     	int tex[] = {1,2,3,4}; //static GLenum tex[4];
     	Random randomno = new Random();
     	   // check next float value  
+    	
+    	uniform_provider.setX(frame);
     	
     	float rand = randomno.nextFloat();
         int iResolution = glGetUniformLocation(shaderProgram, "iResolution");
@@ -79,24 +79,15 @@ public class shadertoy  extends BaseStrategy{
         glUniform1f(iSampleRate, randomno.nextFloat() * 44100);
 
         //vec3
-        
-        if (uniform_provider != null) {
-        	System.out.println("uniform");
-        	glUniform3f(iResolution,  uniform_provider.getiResolution().x, uniform_provider.getiResolution().y, uniform_provider.getiResolution().z);
+    	glUniform3f(iResolution,  uniform_provider.getiResolution().x, uniform_provider.getiResolution().y, uniform_provider.getiResolution().z);
         	
-        }else {
-        	glUniform3f(iResolution, (float) viewport_width, (float) viewport_height, (float)1);
-        }
-        
-        
-        
         //glUniform3f(iChannelResolution, 100, 100, 100); // auflösung von jedem der 4 Kanäle
         
         
         //vec4
         
         try {
-        	glUniform4f(iMouse, (float) MouseInfo.getPointerInfo().getLocation().getX(),(float) MouseInfo.getPointerInfo().getLocation().getY(),  (float) (Mouse.isButtonDown(0)? 1 : 0),(float) (Mouse.isButtonDown(1)? 1 : 0));
+        	glUniform4f(iMouse, uniform_provider.getiMouse().x,uniform_provider.getiMouse().y,  uniform_provider.getiMouse().z, uniform_provider.getiMouse().w);
         	}
         catch (Exception e) {
         	System.out.println("Error while passing MouseInfo into the Shader");
@@ -144,7 +135,13 @@ public class shadertoy  extends BaseStrategy{
 			uniform float     iSampleRate;           // sound sample rate (i.e., 44100)
          */
         
-        
+    }
+    
+    public void initUniformProvider() {
+    	uniform_provider = new UniformProvider();
+    	uniform_provider.iResolutionX.setValue(viewport_width-100);
+    	uniform_provider.iResolutionY.setValue(viewport_height);
+    	uniform_provider.iResolutionZ.setValue(1);
     }
 	
     private void init_options_panel() {

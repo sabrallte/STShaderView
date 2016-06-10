@@ -90,7 +90,7 @@ public class Main  implements IValueSubmittedListener{
     long lastFP10ms = 0;
     
     public Main() {
-    	webcam = new WebcamController();
+    	//webcam = new WebcamController();
     }
 
     public void onSubmitted(String value) {
@@ -116,7 +116,7 @@ public class Main  implements IValueSubmittedListener{
     private void setUpTextures()
     {
     	
-    	if (webcam.isReady()) {
+    	if (webcam!=null && webcam.isReady()) {
     	       texture = loadTex.loadBufferedImage(webcam.takePicture(), 1);
     	       //texture = loadTex.loadImageSource("res/textures/1.png");
     	       texture = loadTex.loadImageSource("res/textures/2.png");
@@ -127,7 +127,7 @@ public class Main  implements IValueSubmittedListener{
     }
     
     private void refreshWebcamPicture() {
-    	if (webcam.isReady()) {
+    	if (webcam!=null && webcam.isReady()) {
  	       texture = loadTex.loadBufferedImage(webcam.takePicture(), 1);
     	}
     	
@@ -197,9 +197,7 @@ public class Main  implements IValueSubmittedListener{
         tabpane.addTab("Node Editor", nodePanel);
         
         
-        active_shader =  new shadertoy();
-  		active_shader.set_viewport_width(webgl_container.getWidth());
-  		active_shader.set_viewport_height(webgl_container.getHeight());
+
         
         f_visual.getContentPane().add(webgl_container);
         f_controll.getContentPane().add(tabpane);
@@ -211,6 +209,13 @@ public class Main  implements IValueSubmittedListener{
         f_visual.setBounds(0, 0, windowWidth, windowHeight);
         f_visual.setVisible(true);
         f_visual.setResizable(true);
+        
+        
+        active_shader =  new shadertoy();
+  		active_shader.set_viewport_width(webgl_container.getWidth());
+  		active_shader.set_viewport_height(webgl_container.getHeight());
+  		active_shader.initUniformProvider();
+        
         
         
         // LISTENER
@@ -270,7 +275,11 @@ public class Main  implements IValueSubmittedListener{
     
     public void destroy() {
     	running = false;
-    	webcam.deactivate();
+    	
+    	if (webcam != null) {
+    		webcam.deactivate();
+    	}
+    	
     	try {
     	    Thread.sleep(1000);                 //1000 milliseconds is one second.
     	} catch(InterruptedException ex) {
@@ -367,9 +376,6 @@ public class Main  implements IValueSubmittedListener{
     }
    }
     
-    
-
-
 
 
 //TODO:

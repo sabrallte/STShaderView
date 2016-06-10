@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import org.lwjgl.Sys;
 
 import model.UniformProvider;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Date;
 public class BaseStrategy {
@@ -24,13 +25,10 @@ public class BaseStrategy {
 	
 	//System Zeit in mms
 	
-	private void init_options_panel() {}
+	private void init_options_panel() {throw new NotImplementedException();}
 
-	public void pass_uniforms(){
-		
-	}
+	public void pass_uniforms(){throw new NotImplementedException();}
 	
-
 
 	public JPanel get_options_panel() {
 		return optionsPanel;
@@ -61,6 +59,9 @@ public class BaseStrategy {
     }
     public void setUniformProvider(UniformProvider uniform_provider) {
     	this.uniform_provider = uniform_provider;
+    }
+    public UniformProvider getUniformProvider() {
+    	return this.uniform_provider;
     }
 
 

@@ -263,7 +263,7 @@ public class FIGeneratorDialog extends javax.swing.JDialog {
     	if (ButtonGroup.getSelection() == null) {return null;}
     	
     	switch(ButtonGroup.getSelection().getActionCommand()) {
-	    	case "sinus": return new SinusGenerator(Integer.parseInt(jtf_amplitude.getText()));
+	    	case "sinus": System.out.println("new sinusgenm with amplitude: " + Integer.parseInt(jtf_amplitude.getText().toString()));return new SinusGenerator(Integer.parseInt(jtf_amplitude.getText()));
 	    	case "floor": return new FloorGenerator(Integer.parseInt(jtf_amplitude.getText()));
 	    	case "log": return new LogGenerator(Integer.parseInt(jtf_amplitude.getText()));
 	    	case "sqrt": return new SqrtGenerator(Integer.parseInt(jtf_amplitude.getText()));
